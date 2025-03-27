@@ -31,10 +31,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
 
+
     public User createUser(UserDTO userDTO) {
         User user = new User();
         user.setEmail(userDTO.getEmail());
         user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+        user.setNom(userDTO.getNom()); // Set the nom field
+        user.setPrenom(userDTO.getPrenom()); // Set the prenom field
+        user.setTelephone(userDTO.getTelephone()); // Set the telephone field
 
         Set<Role> roles = new HashSet<>();
         if (userDTO.getRoles() != null) {
@@ -55,7 +59,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-
     public User updateUser(Long id, UserDTO userDTO) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
@@ -64,16 +67,20 @@ public class UserServiceImpl implements UserService {
         if (userDTO.getPassword() != null && !userDTO.getPassword().isEmpty()) {
             user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
         }
+        user.setNom(userDTO.getNom()); // Set the nom field
+        user.setPrenom(userDTO.getPrenom()); // Set the prenom field
+        user.setTelephone(userDTO.getTelephone()); // Set the telephone field
 
-        Set<Role> roles = userDTO.getRoles().stream()
-                .map(r -> roleRepository.findById(r.getId())
-                        .orElseThrow(() -> new ResourceNotFoundException("Role not found")))
-                .collect(Collectors.toSet());
-        user.setRoles(roles);
+        if (userDTO.getRoles() != null) {
+            Set<Role> roles = userDTO.getRoles().stream()
+                    .map(r -> roleRepository.findById(r.getId())
+                            .orElseThrow(() -> new ResourceNotFoundException("Role not found")))
+                    .collect(Collectors.toSet());
+            user.setRoles(roles);
+        }
 
         return userRepository.save(user);
     }
-
     @Override
 
     public void deleteUser(Long id) {
