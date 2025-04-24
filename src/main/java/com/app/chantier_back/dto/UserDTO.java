@@ -19,5 +19,6 @@ public class UserDTO {
     @NotBlank
     private String password;
     private Set<RoleDTO> roles;
+    private Set<TacheDTO> taches;
 
 }
