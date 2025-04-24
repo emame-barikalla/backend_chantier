@@ -3,7 +3,7 @@ package com.app.chantier_back.services.interfaces;
 import com.app.chantier_back.dto.UserDTO;
 import com.app.chantier_back.entities.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
-
+import com.app.chantier_back.entities.ERole;
 import java.util.List;
 
 public interface UserService extends UserDetailsService {
@@ -13,4 +13,7 @@ public interface UserService extends UserDetailsService {
     void deleteUser(Long id);
 
     User getUserById(Long id);
+
+
+    List<User> getUsersByRole(ERole roleName);
 }

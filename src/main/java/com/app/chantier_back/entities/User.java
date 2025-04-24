@@ -7,10 +7,7 @@ import lombok.experimental.SuperBuilder;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Entity
@@ -37,6 +34,11 @@ public class User implements UserDetails {
     private String password;
     @Column(nullable = false)
     private String telephone;
+    @Column
+    private String adresse;
+
+    @OneToMany(mappedBy = "assignee", cascade = CascadeType.ALL)
+    private List<Tache> taches = new ArrayList<>();
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JsonIgnore

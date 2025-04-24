@@ -18,6 +18,7 @@ import java.io.IOException;
 
 public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
+
     private static final Logger logger = LoggerFactory.getLogger(JwtAuthorizationFilter.class);
     private final JwtUtil jwtUtil;
     private final UserDetailsService userDetailsService;
@@ -75,3 +76,4 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
         return null;
     }
 }
+

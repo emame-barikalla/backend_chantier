@@ -4,6 +4,7 @@ import com.app.chantier_back.dto.UserDTO;
 import com.app.chantier_back.dto.RoleDTO;
 import com.app.chantier_back.dto.UserResponseDTO;
 import com.app.chantier_back.dto.PermissionDTO;
+import com.app.chantier_back.entities.ERole;
 import com.app.chantier_back.entities.User;
 import com.app.chantier_back.services.interfaces.UserService;
 import lombok.RequiredArgsConstructor;
@@ -53,6 +54,19 @@ public class UserController {
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
         userService.deleteUser(id);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/entreprises")
+    public ResponseEntity<List<User>> getEntreprises() {
+        return ResponseEntity.ok(userService.getUsersByRole(ERole.ROLE_ENTREPRISE));
+    }
+    @GetMapping("/clients")
+    public ResponseEntity<List<User>> getClients() {
+        return ResponseEntity.ok(userService.getUsersByRole(ERole.ROLE_MAITRE_OUVRAGE));
+    }
+    @GetMapping("/bureauxSuivi")
+    public ResponseEntity<List<User>> getBureauxSuivi() {
+        return ResponseEntity.ok(userService.getUsersByRole(ERole.ROLE_BUREAU_ETUDE));
     }
 
     private UserResponseDTO convertToResponseDTO(User user) {
