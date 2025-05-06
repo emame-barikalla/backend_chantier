@@ -1,5 +1,7 @@
 package com.app.chantier_back.entities;
 
+import com.app.chantier_back.entities.enumeration.Category;
+import com.app.chantier_back.entities.enumeration.StatusProjet;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -28,8 +30,16 @@ public class Projet {
 
     private Double budget;
 
+    private boolean isArchived = false;
+
     @Enumerated(EnumType.STRING)
-    private Status status;
+    private Category category;
+
+    @Enumerated(EnumType.STRING)
+    private StatusProjet status;
     @OneToMany(mappedBy = "projet", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Tache> taches = new ArrayList<>();
+
+    @OneToMany(mappedBy = "projet", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Document> documents = new ArrayList<>();
 }

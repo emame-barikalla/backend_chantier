@@ -1,7 +1,9 @@
 package com.app.chantier_back.controllers;
 
 import com.app.chantier_back.dto.ProjetDTO;
-import com.app.chantier_back.entities.Status;
+import com.app.chantier_back.entities.Projet;
+import com.app.chantier_back.entities.enumeration.Category;
+import com.app.chantier_back.entities.enumeration.StatusProjet;
 import com.app.chantier_back.services.interfaces.ProjetService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -20,8 +22,11 @@ public class ProjetController {
     @GetMapping("/all")
     public ResponseEntity<List<ProjetDTO>> getAllProjects() {
         List<ProjetDTO> projects = projetService.getAllProjets();
+
         return new ResponseEntity<>(projects, HttpStatus.OK);
+
     }
+
     @GetMapping("/{id}")
     public ResponseEntity<ProjetDTO> getProjectById(@PathVariable Long id) {
         ProjetDTO project = projetService.getProjetById(id);
@@ -45,8 +50,30 @@ public class ProjetController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
     @GetMapping("/status/{status}")
-    public ResponseEntity<List<ProjetDTO>> getProjectsByStatus(@PathVariable Status status) {
+    public ResponseEntity<List<ProjetDTO>> getProjectsByStatus(@PathVariable StatusProjet status) {
         List<ProjetDTO> projects = projetService.getProjectsByStatus(status);
         return new ResponseEntity<>(projects, HttpStatus.OK);
     }
+
+    // Archive a project
+    @PutMapping("/archive/{id}")
+    public ResponseEntity<?> archiveProject(@PathVariable Long id) {
+        projetService.archiveProject(id);
+        return ResponseEntity.ok("Project archived successfully");
+    }
+
+    // Fetch archived projects
+    @GetMapping("/archived")
+    public List<Projet> getArchivedProjects() {
+        return projetService.getArchivedProjects();
+    }
+
+    @GetMapping("/category/{category}")
+    public ResponseEntity<List<ProjetDTO>> getProjectsByCategory(@PathVariable Category category) {
+        List<ProjetDTO> projects = projetService.getProjectsByCategory(category);
+        return new ResponseEntity<>(projects, HttpStatus.OK);
+    }
+
+
+
 }

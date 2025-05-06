@@ -2,7 +2,8 @@ package com.app.chantier_back.services;
 
 import com.app.chantier_back.dto.PermissionDTO;
 import com.app.chantier_back.dto.RoleDTO;
-import com.app.chantier_back.entities.ERole;
+import com.app.chantier_back.entities.User;
+import com.app.chantier_back.entities.enumeration.ERole;
 import com.app.chantier_back.entities.Permission;
 import com.app.chantier_back.entities.Role;
 import com.app.chantier_back.exceptions.ResourceNotFoundException;
@@ -48,6 +49,7 @@ public class RoleServiceImpl implements RoleService {
                 .map(role -> {
                     RoleDTO dto = new RoleDTO();
                     dto.setId(role.getId());
+                    dto.setDescription(role.getDescription());
                     dto.setName(String.valueOf(role.getName()));
 
                     // Create a new set of permissions to avoid concurrent modification
@@ -71,6 +73,7 @@ public class RoleServiceImpl implements RoleService {
                 .orElseThrow(() -> new ResourceNotFoundException("Role not found"));
 
         role.setName(ERole.valueOf(roleDTO.getName()));
+        role.setDescription(roleDTO.getDescription());
         Set<Permission> permissions = roleDTO.getPermissions().stream()
                 .map(p -> permissionRepository.findById(p.getId())
                         .orElseThrow(() -> new ResourceNotFoundException("Permission not found")))
@@ -92,4 +95,41 @@ public class RoleServiceImpl implements RoleService {
         return roleRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Role not found"));
     }
+
+    @Override
+    public List<RoleDTO> getRolesByUser(User user) {
+        List<Role> roles = roleRepository.findAll();
+        
+        // If user is admin, return all roles except ROLE_ADMIN
+        if (user.getRoles().stream().anyMatch(role -> role.getName() == ERole.ROLE_ADMIN)) {
+            return roles.stream()
+                    .filter(role -> role.getName() != ERole.ROLE_ADMIN)
+                    .map(this::convertToDTO)
+                    .collect(Collectors.toList());
+        }
+        
+        // For non-admin users, return only their roles
+        return user.getRoles().stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+    }
+
+    private RoleDTO convertToDTO(Role role) {
+        RoleDTO dto = new RoleDTO();
+        dto.setId(role.getId());
+        dto.setDescription(role.getDescription());
+        dto.setName(String.valueOf(role.getName()));
+
+        Set<PermissionDTO> permissionDTOs = new HashSet<>();
+        for (Permission permission : role.getPermissions()) {
+            PermissionDTO pDto = new PermissionDTO();
+            pDto.setId(permission.getId());
+            pDto.setName(permission.getName());
+            permissionDTOs.add(pDto);
+        }
+        dto.setPermissions(permissionDTOs);
+
+        return dto;
+    }
+
 }

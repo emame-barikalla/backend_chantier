@@ -1,6 +1,9 @@
 package com.app.chantier_back.dto;
 
-import com.app.chantier_back.entities.Status;
+import com.app.chantier_back.entities.enumeration.Category;
+import com.app.chantier_back.entities.enumeration.StatusProjet;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -15,6 +18,10 @@ public class ProjetDTO {
     private LocalDate dateDebut;
     private LocalDate dateFin;
     private Double budget;
-    private Status status;
+    private StatusProjet status;
+    private boolean isArchived = false;
+    @Enumerated(EnumType.STRING)
+    private Category category;
     private List<Long> tacheIds = new ArrayList<>();
+    private List<Long> documentIds = new ArrayList<>();
 }

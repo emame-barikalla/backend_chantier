@@ -1,6 +1,5 @@
 package com.app.chantier_back.repositories;
 
-import com.app.chantier_back.entities.Statut;
 import com.app.chantier_back.entities.Tache;
 import org.springframework.data.jpa.repository.JpaRepository;
 

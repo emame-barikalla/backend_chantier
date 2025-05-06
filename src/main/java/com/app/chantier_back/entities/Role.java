@@ -1,5 +1,6 @@
 package com.app.chantier_back.entities;
 
+import com.app.chantier_back.entities.enumeration.ERole;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
@@ -22,6 +23,8 @@ public class Role implements GrantedAuthority {
     @Enumerated(EnumType.STRING)
     @Column(length = 30)
     private ERole name;
+
+    private String description;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JsonIgnore
