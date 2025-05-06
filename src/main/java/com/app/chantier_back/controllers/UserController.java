@@ -4,7 +4,7 @@ import com.app.chantier_back.dto.UserDTO;
 import com.app.chantier_back.dto.RoleDTO;
 import com.app.chantier_back.dto.UserResponseDTO;
 import com.app.chantier_back.dto.PermissionDTO;
-import com.app.chantier_back.entities.ERole;
+import com.app.chantier_back.entities.enumeration.ERole;
 import com.app.chantier_back.entities.User;
 import com.app.chantier_back.services.interfaces.UserService;
 import lombok.RequiredArgsConstructor;

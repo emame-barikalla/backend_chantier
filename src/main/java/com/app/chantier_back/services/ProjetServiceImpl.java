@@ -2,7 +2,8 @@ package com.app.chantier_back.services;
 
 import com.app.chantier_back.dto.ProjetDTO;
 import com.app.chantier_back.entities.Projet;
-import com.app.chantier_back.entities.Status;
+import com.app.chantier_back.entities.enumeration.Category;
+import com.app.chantier_back.entities.enumeration.StatusProjet;
 import com.app.chantier_back.exceptions.ResourceNotFoundException;
 import com.app.chantier_back.repositories.ProjetRepository;
 import com.app.chantier_back.services.interfaces.ProjetService;
@@ -17,12 +18,15 @@ import java.util.stream.Collectors;
 public class ProjetServiceImpl implements ProjetService {
     private final ProjetRepository projetRepository;
 
+    // Récupérer tous les projets except les archivés
     @Override
     public List<ProjetDTO> getAllProjets() {
-        return projetRepository.findAll().stream()
+        return projetRepository.findByIsArchived(false).stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
+
     }
+
 
     @Override
     public ProjetDTO getProjetById(Long id) {
@@ -34,7 +38,7 @@ public class ProjetServiceImpl implements ProjetService {
     @Override
     public ProjetDTO createProjet(ProjetDTO projetDTO) {
         Projet project = convertToEntity(projetDTO);
-        project.setStatus(Status.PLANIFIE);
+        project.setStatus(StatusProjet.PLANIFIE);
         Projet savedProject = projetRepository.save(project);
         return convertToDTO(savedProject);
     }
@@ -49,6 +53,7 @@ public class ProjetServiceImpl implements ProjetService {
         existingProject.setDateFin(projetDTO.getDateFin());
         existingProject.setBudget(projetDTO.getBudget());
         existingProject.setStatus(projetDTO.getStatus());
+        existingProject.setCategory(projetDTO.getCategory());
 
 
         Projet updatedProject = projetRepository.save(existingProject);
@@ -65,8 +70,30 @@ public class ProjetServiceImpl implements ProjetService {
     }
 
     @Override
-    public List<ProjetDTO> getProjectsByStatus(Status status) {
+    public List<ProjetDTO> getProjectsByStatus(StatusProjet status) {
         return projetRepository.findByStatus(status).stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+    }
+
+    // archiver un projet
+    @Override
+    public void archiveProject(Long id) {
+        Projet projet = projetRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Project not found with id: " + id));
+        projet.setArchived(true);
+        projetRepository.save(projet);
+    }
+
+   // voir la liste des projets archivés
+    @Override
+    public List<Projet> getArchivedProjects() {
+        return projetRepository.findByIsArchived(true);
+    }
+
+    @Override
+    public List<ProjetDTO> getProjectsByCategory(Category category) {
+        return projetRepository.findByCategory(category).stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
@@ -79,6 +106,7 @@ public class ProjetServiceImpl implements ProjetService {
         projetDTO.setDateFin(projet.getDateFin());
         projetDTO.setBudget(projet.getBudget());
         projetDTO.setStatus(projet.getStatus());
+        projetDTO.setCategory(projet.getCategory());
 
 
         if (projet.getTaches() != null) {
@@ -97,6 +125,7 @@ public class ProjetServiceImpl implements ProjetService {
         projet.setDateFin(projetDTO.getDateFin());
         projet.setBudget(projetDTO.getBudget());
         projet.setStatus(projetDTO.getStatus());
+        projet.setCategory(projetDTO.getCategory());
 
         return projet;
     }

@@ -1,5 +1,6 @@
 package com.app.chantier_back.entities;
 
+import com.app.chantier_back.entities.enumeration.StatutTache;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -21,7 +22,7 @@ public class Tache {
     private String description;
 
     @Enumerated(EnumType.STRING)
-    private Statut statut;
+    private StatutTache statut;
 
     private LocalDate date;
 

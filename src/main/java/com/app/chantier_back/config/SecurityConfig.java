@@ -38,13 +38,13 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable())
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/projets/**","/api/auth/login", "/api/auth/register", "/swagger-ui/**",
+                .requestMatchers("/api/projets/**","/api/documents/upload/**","/api/auth/login", "/api/auth/register", "/swagger-ui/**",
                         "/swagger-ui.html",
                         "/v3/api-docs/**",
                         "/swagger-resources/**",
                         "/webjars/**"
                 ).permitAll()
-                .requestMatchers("/api/admin/**").hasAuthority("ROLE_ADMIN")
+                //.requestMatchers("/api/admin/**").hasAuthority("ROLE_ADMIN")
                 .anyRequest().authenticated()
             )
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

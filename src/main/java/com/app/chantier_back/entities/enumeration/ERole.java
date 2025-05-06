@@ -1,4 +1,4 @@
-package com.app.chantier_back.entities;
+package com.app.chantier_back.entities.enumeration;
 
 public enum ERole {
     ROLE_BUREAU_ETUDE,

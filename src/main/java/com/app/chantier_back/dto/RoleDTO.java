@@ -11,5 +11,6 @@ public class RoleDTO {
     private Long id;
     @NotBlank
     private String name;
+    private String description;
     private Set<PermissionDTO> permissions;
 }

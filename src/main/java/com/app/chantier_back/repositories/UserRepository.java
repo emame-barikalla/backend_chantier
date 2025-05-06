@@ -1,6 +1,6 @@
 package com.app.chantier_back.repositories;
 
-import com.app.chantier_back.entities.ERole;
+import com.app.chantier_back.entities.enumeration.ERole;
 import com.app.chantier_back.entities.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

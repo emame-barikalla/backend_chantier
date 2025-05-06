@@ -1,9 +1,8 @@
 package com.app.chantier_back.services.interfaces;
 
-
-
 import com.app.chantier_back.dto.RoleDTO;
 import com.app.chantier_back.entities.Role;
+import com.app.chantier_back.entities.User;
 
 import java.util.List;
 
@@ -14,4 +13,6 @@ public interface RoleService {
     void deleteRole(Long id);
 
     Role getRoleById(Long id);
+
+    List<RoleDTO> getRolesByUser(User user);
 }

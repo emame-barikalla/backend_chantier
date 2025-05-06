@@ -1,7 +1,7 @@
 package com.app.chantier_back.dto;
 
 
-import com.app.chantier_back.entities.Statut;
+import com.app.chantier_back.entities.enumeration.StatutTache;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -11,7 +11,7 @@ import java.time.LocalDate;
     public class TacheDTO {
         private Long id;
         private String description;
-        private Statut statut;
+        private StatutTache statut;
         private LocalDate date;
         private Long projetId;
         private Long assigneeId;
