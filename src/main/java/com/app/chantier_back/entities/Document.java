@@ -1,6 +1,7 @@
 package com.app.chantier_back.entities;
 
 import com.app.chantier_back.entities.enumeration.DocumentType;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -20,18 +21,31 @@ public class Document {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private String titre;
+
+    @Column(length = 500)
     private String description;
+
+
     private LocalDate date;
 
     @Lob
+    @JsonIgnore // Prevent serializing binary data in REST responses
     private byte[] data;
 
-    @Enumerated(EnumType.STRING)
-    private DocumentType type;
+    private String contentType; // Store the file's MIME type
 
+    private String fileName; // Original file name
+
+    private Long fileSize; // Size in bytes
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private DocumentType type;
 
     @ManyToOne
     @JoinColumn(name = "projet_id", nullable = false)
+    @JsonIgnore // Prevent circular reference in JSON serialization
     private Projet projet;
 }
