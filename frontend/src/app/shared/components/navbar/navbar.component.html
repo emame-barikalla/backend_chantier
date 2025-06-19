@@ -1,0 +1,63 @@
+<nav class="navbar">
+  <div class="navbar-brand">
+    <img src="assets/images/logo.png" alt="Chantier Direct" class="logo">
+  </div>
+  <div class="navbar-menu">
+    <a *ngIf="isAdmin" routerLink="/dashboard" routerLinkActive="active" class="nav-item">
+      <i class="fas fa-tachometer-alt navbar-icon"></i>
+      <span>Dashboard</span>
+    </a>
+     <!-- <a *ngIf="isAdmin" routerLink="/clients" routerLinkActive="active" class="nav-item">
+      <i class="fas fa-users navbar-icon"></i>
+      <span>les clients</span>
+    </a> -->
+    <a *ngIf="isAdmin" routerLink="/entreprises" routerLinkActive="active" class="nav-item">
+      <i class="fas fa-building navbar-icon"></i>
+      <span>Les entreprises</span>
+    </a>
+    <a *ngIf="isMoa"  routerLink="/maitres-oeuvres" routerLinkActive="active" class="nav-item">
+      <i class="fas fa-hard-hat navbar-icon"></i>
+      <span>Les Maîtres d'œuvres</span>
+    </a>
+    <a *ngIf="isMaitreOeuvre" routerLink="/sous-traitants" routerLinkActive="active" class="nav-item">
+      <i class="fas fa-tools navbar-icon"></i>
+      <span>Les Sous-traitants</span>
+    </a>
+    <a *ngIf="isMaitreOeuvre" routerLink="/controleurs" routerLinkActive="active" class="nav-item">
+      <i class="fas fa-clipboard-check navbar-icon"></i>
+      <span>Les Contrôleurs</span>
+    </a>
+    <a  *ngIf="isAdmin" routerLink="/bureau-suivi" routerLinkActive="active" class="nav-item">
+      <i class="fas fa-briefcase navbar-icon"></i>
+      <span>Les bureaux de suivi</span>
+    </a>
+  </div>
+  <div class="navbar-end">
+    <div class="notification-icon" (click)="toggleNotifications()" aria-label="Notifications">
+      <i class="fas fa-bell"></i>
+      <span class="notification-count" *ngIf="unreadCount > 0">{{ unreadCount }}</span>
+      <app-notification-dropdown 
+        [notifications]="notifications" 
+        [showDropdown]="showNotifications"
+        (close)="closeNotifications()">
+      </app-notification-dropdown>
+    </div>
+    <div class="user-profile" (click)="toggleProfileMenu()" tabindex="0" aria-label="User menu">
+      <img src="assets/images/avatar.png" alt="User" class="avatar">
+      <div class="profile-dropdown" *ngIf="showProfileMenu">
+        <div class="dropdown-item" routerLink="/profile">
+          <i class="fas fa-user-cog"></i>
+          <span>Mon Profil</span>
+        </div>
+        <div class="dropdown-item" routerLink="/change-password">
+          <i class="fas fa-arrows-rotate"></i>
+          <span>Changer Password</span>
+        </div>
+        <div class="dropdown-item" (click)="logout()">
+          <i class="fas fa-sign-out-alt"></i>
+          <span>se deconnecter</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>

@@ -1,0 +1,104 @@
+<div class="maitre-oeuvre-container">
+  <!-- Gray header area -->
+  <div class="maitre-oeuvre-header">
+    <div class="header-top">
+      <div class="liste-des-maitres-oeuvres">Liste des maîtres d'œuvre</div>
+      <div class="header-actions">
+        <div class="search">
+          <img class="search-s-icon" alt="Search Icon" src="/assets/images/Search-s.svg" />
+          <input
+            type="text"
+            class="text"
+            placeholder="Search"
+            [(ngModel)]="searchQuery"
+            (input)="onSearch()"
+          />
+          <div class="shortcut">
+            <div class="c">⌘/</div>
+          </div>
+        </div>
+        <button class="button-cadastrarlivro" (click)="openModal()">
+          <div class="button-cadastrarlivro-child"></div>
+          <span class="div">+</span>
+          <b class="ajouter-une-maitre-oeuvre">Ajouter un maître </b>
+        </button>
+      </div>
+    </div>
+    <div class="header-bottom">
+      <div class="frame-child">
+        <div class="maitres-oeuvres-existentes">{{ filteredMaitresOeuvres.length }} maîtres existants</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main content (table and modal) -->
+  <div class="maitres-oeuvres-content">
+    <div class="frame-group">
+      <div class="frame-wrapper" *ngFor="let maitreOeuvre of filteredMaitresOeuvres; let i = index">
+        <div class="card1-livros">
+          <div class="card1-livros-child"></div>
+          <div class="div1">{{ i + 1 }}</div>
+          <img class="capa-alice1-icon" alt="Maître d'œuvre Avatar" src="/assets/images/capa-alice1.png" />
+          
+          <div class="telephone-parent">
+            <div class="telephone">Nom</div>
+            <div class="telephone">Telephone</div>
+            <div class="telephone">Adresse</div>
+            <div class="telephone">Email</div>
+          </div>
+          <div class="parent">
+            <div class="nktt-sukuk">{{ maitreOeuvre.nom }}</div>
+            <div class="nktt-sukuk">{{ maitreOeuvre.telephone }}</div>
+            <div class="nktt-sukuk">{{ maitreOeuvre.adresse || 'N/A' }}</div>
+            <div class="nktt-sukuk">{{ maitreOeuvre.email }}</div>
+          </div>
+          <img class="icon-delete" alt="Delete Icon" src="/assets/images/icon-delete.svg" (click)="deleteMaitreOeuvre(maitreOeuvre.id)" title="supprimer" />
+          <img class="icon-edit" alt="Edit Icon" src="/assets/images/icon-edit.svg" (click)="openModal(maitreOeuvre)" title="modifier" />
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal" *ngIf="showModal" #modal (click)="onModalClick($event)">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>{{ editingMaitreOeuvre ? 'Edit Maître d\'œuvre' : 'Ajouter un maître d\'œuvre' }}</h2>
+          <button class="close-button" (click)="closeModal()">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <form [formGroup]="maitreOeuvreForm" (ngSubmit)="onSubmit()">
+          <div class="form-group">
+            <label for="nom">Nom</label>
+            <input type="text" id="nom" formControlName="nom" required />
+          </div>
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" formControlName="email" required />
+          </div>
+          <div class="form-group">
+            <label for="telephone">Téléphone</label>
+            <input type="tel" id="telephone" formControlName="telephone" required />
+          </div>
+          <div class="form-group">
+            <label for="adresse">Adresse</label>
+            <input type="text" id="adresse" formControlName="adresse" />
+          </div>
+          <div class="form-group" *ngIf="!editingMaitreOeuvre">
+            <label for="password">Password</label>
+            <input type="password" id="password" formControlName="password" />
+          </div>
+          <div class="modal-footer">
+            <button
+              type="submit"
+              class="save-button"
+              [disabled]="!maitreOeuvreForm.valid || isLoading"
+            >
+              {{ isLoading ? 'Saving...' : 'Enregistrer' }}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

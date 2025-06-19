@@ -1,0 +1,90 @@
+<!-- Gray header area -->
+<div class="entreprise-header">
+  <div class="header-top">
+    <div class="liste-des-roles">Liste des rôles</div>
+    <div class="header-actions">
+      <!-- Only show Add Role button for admins -->
+      <button *ngIf="canPerformAdminActions()" class="button-cadastrarlivro" (click)="openAddRoleModal()">
+        <div class="button-cadastrarlivro-child"></div>
+        <span class="div">+</span>
+        <b class="ajouter-un-role">Ajouter un rôle</b>
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="role-container">
+  <!-- Error message display -->
+  <div *ngIf="error" class="error-message">
+    {{ error }}
+  </div>
+
+  <!-- Loading indicator -->
+  <div *ngIf="loading" class="loading-indicator">
+    Chargement...
+  </div>
+
+  <div class="roles-list">
+    <!-- Role List - Grid Layout -->
+    <div class="group-parent">
+      <div *ngFor="let role of roles" class="entreprise-parent">
+        <div class="role-header">
+          <div class="role-info">
+            <h3>{{ getFormattedRoleName(role.name) }}</h3>
+            <p>{{ role.description || 'Aucune description disponible' }}</p>
+          </div>
+          
+          <!-- Only show actions for admins -->
+          <div *ngIf="canPerformAdminActions()" class="role-actions">
+            <button class="action-btn edit-btn" (click)="openEditRoleModal(role)" title="Modifier">
+              <i class="fas fa-edit btn-icon"></i>
+            </button>
+            <button class="action-btn delete-btn" (click)="deleteRole(role.id)" title="Supprimer">
+              <i class="fas fa-trash-alt btn-icon"></i>
+            </button>
+          </div>
+        </div>
+        
+        
+        <!-- Toggle permissions button -->
+        <!-- <button class="toggle-permissions-btn" (click)="togglePermissions(role.id)">
+          {{ showPermissions[role.id] ? 'Masquer les permissions' : 'Afficher les permissions' }}
+        </button>
+         -->
+        <!-- Permissions list - visible to all users -->
+        <div *ngIf="showPermissions[role.id]" class="permissions-list">
+          <h4>Permissions :</h4>
+          <ul>
+            <li *ngFor="let permission of permissionsMap[role.id]" title="{{ permission.name }}">
+              {{ permission.name }}
+            </li>
+          </ul>
+          <div *ngIf="!permissionsMap[role.id]?.length" class="no-permissions">
+            Aucune permission assignée
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal for Adding/Editing Role -->
+  <div *ngIf="isModalOpen" class="modal-overlay" #modal (click)="onModalClick($event)">
+    <div class="modal-content">
+      <h3>{{ editingRole ? 'Modifier le rôle' : 'Ajouter un rôle' }}</h3>
+      <form (ngSubmit)="addRole()">
+        <div class="form-group">
+          <label>Nom du rôle</label>
+          <input [(ngModel)]="newRole.name" name="name" required class="form-control" />
+        </div>
+        <div class="form-group">
+          <label>Description</label>
+          <textarea [(ngModel)]="newRole.description" name="description" class="form-control" rows="3"></textarea>
+        </div>
+        <div class="modal-actions">
+          <button type="button" (click)="closeModal()" class="cancel-button">Annuler</button>
+          <button type="submit" class="save-button">Enregistrer</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

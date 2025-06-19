@@ -1,0 +1,8 @@
+export enum Category {
+  MEDICAL = 'MEDICAL',
+  SOFTWARE = 'SOFTWARE',
+  RESIDENTIEL = 'Résidentiel',
+  COMMERCIAL = 'COMMERCIAL',
+  INSTITUTIONNEL = 'INSTITUTIONNEL',
+  AUTRE = 'AUTRE'
+}

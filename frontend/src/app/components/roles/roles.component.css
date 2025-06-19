@@ -1,0 +1,454 @@
+/* Entire container for the component */
+.role-container {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  background-color: white;
+  min-height: 100vh;
+}
+
+/* Gray header area */
+.entreprise-header {
+  border-radius: 25px 25px 0 0;
+  background-color: #F1F3F5;
+  width: 100%;
+  height: 100px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 10px 20px;
+  box-sizing: border-box;
+}
+
+.header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 5px;
+}
+
+.liste-des-roles {
+  font-size: 24px;
+  line-height: 28px;
+  font-weight: 500;
+  color: #000;
+  font-family: Poppins, sans-serif;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.button-cadastrarlivro {
+  position: relative;
+  width: 150px;
+  height: 35px;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.3s ease;
+}
+
+.button-cadastrarlivro:hover {
+  opacity: 0.9;
+}
+
+.button-cadastrarlivro-child {
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: 10px;
+  width: 100%;
+  height: 100%;
+  background-color: #d0af56;
+  z-index: 0;
+}
+
+.ajouter-un-role {
+  position: relative;
+  font-size: 12px;
+  font-weight: 600;
+  color: #fbfbfb;
+  font-family: Poppins, sans-serif;
+  z-index: 1;
+  white-space: nowrap;
+  margin-left: 0;
+}
+
+.div {
+  font-size: 24px;
+  font-weight: 500;
+  font-family: Raleway, sans-serif;
+  color: #fbfbfb;
+  z-index: 1;
+  margin-right: 8px;
+}
+
+/* Role list */
+.group-parent {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+  margin: 0 auto;
+  max-width: 1200px;
+}
+
+.entreprise-parent {
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 15px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: relative;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  height: 100%;
+  min-height: 120px;
+}
+
+.entreprise-parent:hover {
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+  transform: translateY(-3px);
+}
+
+/* Role header layout with flexbox for proper alignment */
+.role-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 100%;
+  margin-bottom: 5px;
+}
+
+/* Role info section */
+.role-info {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: calc(100% - 80px);
+}
+
+.role-info h3 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+  margin: 0;
+  font-family: Poppins, sans-serif;
+  text-transform: capitalize;
+}
+
+.role-info p {
+  color: #666;
+  font-size: 13px;
+  margin: 0;
+  line-height: 1.4;
+  font-family: Inter, sans-serif;
+}
+
+/* Toggle permissions button */
+.toggle-permissions-btn {
+  align-self: flex-start;
+  padding: 4px 10px;
+  background-color: transparent;
+  border: 1px solid #d0af56;
+  border-radius: 4px;
+  color: #d0af56;
+  font-size: 11px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: Poppins, sans-serif;
+  margin-top: 2px;
+}
+
+.toggle-permissions-btn:hover {
+  background-color: #f9f5ea;
+}
+
+/* Admin action buttons */
+.role-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.action-btn {
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background-color: #f5f5f5;
+}
+
+.action-btn:hover {
+  transform: translateY(-2px);
+}
+
+.edit-btn {
+  color: #666;
+}
+
+.edit-btn:hover {
+  background-color: #e0e0e0;
+}
+
+.delete-btn {
+  color: #d32f2f;
+}
+
+.delete-btn:hover {
+  background-color: #ffe5e5;
+}
+
+/* Icon styling */
+.btn-icon {
+  font-size: 14px;
+}
+
+/* Permissions list */
+.permissions-list {
+  margin-top: 5px;
+  padding: 10px;
+  background-color: #f8f9fa;
+  border-radius: 6px;
+  border-left: 3px solid #d0af56;
+  font-size: 12px;
+  flex-grow: 1;
+  max-height: 150px;
+  overflow-y: auto;
+}
+
+.permissions-list h4 {
+  margin: 0 0 6px 0;
+  font-size: 13px;
+  color: #555;
+  font-family: Poppins, sans-serif;
+}
+
+.permissions-list ul {
+  margin: 0;
+  padding: 0 0 0 18px;
+  list-style-type: circle;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 5px;
+}
+
+.permissions-list li {
+  padding: 2px 0;
+  color: #555;
+  font-size: 12px;
+  font-family: Inter, sans-serif;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* No permissions message */
+.no-permissions {
+  color: #888;
+  font-style: italic;
+  text-align: center;
+  padding: 5px 0;
+}
+
+/* Error message styling */
+.error-message {
+  background-color: #fff0f0;
+  border-left: 3px solid #d32f2f;
+  color: #d32f2f;
+  padding: 10px 15px;
+  border-radius: 4px;
+  font-family: Inter, sans-serif;
+  margin: 10px 0;
+}
+
+/* Loading indicator */
+.loading-indicator {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  color: #666;
+  font-family: Inter, sans-serif;
+}
+
+/* Modal styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: white;
+  padding: 25px;
+  border-radius: 8px;
+  width: 450px;
+  max-width: 90%;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  position: relative;
+}
+
+.modal-content h3 {
+  text-align: center;
+  margin-bottom: 25px;
+  color: #333;
+  font-family: Poppins, sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  color: #555;
+  font-weight: 500;
+  font-family: Poppins, sans-serif;
+}
+
+.form-control {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  font-family: Inter, sans-serif;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: #d0af56;
+  box-shadow: 0 0 0 2px rgba(208, 175, 86, 0.2);
+}
+
+textarea.form-control {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.cancel-button {
+  padding: 8px 20px;
+  background: #f1f1f1;
+  border: none;
+  border-radius: 4px;
+  color: #666;
+  cursor: pointer;
+  font-weight: 500;
+  font-family: Poppins, sans-serif;
+  transition: all 0.3s ease;
+}
+
+.cancel-button:hover {
+  background: #e0e0e0;
+}
+
+.save-button {
+  padding: 8px 20px;
+  background: #d0af56;
+  border: none;
+  border-radius: 4px;
+  color: white;
+  cursor: pointer;
+  font-weight: 500;
+  font-family: Poppins, sans-serif;
+  transition: all 0.3s ease;
+}
+
+.save-button:hover {
+  background: #c19d3c;
+  transform: translateY(-1px);
+}
+
+.save-button:active {
+  transform: translateY(0);
+}
+
+/* Responsive improvements for mobile */
+@media (max-width: 768px) {
+  .group-parent {
+    grid-template-columns: 1fr;
+  }
+  
+  .entreprise-parent {
+    padding: 12px;
+  }
+  
+  .role-info {
+    width: 70%;
+  }
+  
+  .permissions-list li {
+    width: 100%;
+  }
+  
+  .modal-content {
+    width: 95%;
+    padding: 20px;
+  }
+  
+  .liste-des-roles {
+    font-size: 20px;
+  }
+  
+  .button-cadastrarlivro {
+    width: 130px;
+  }
+}
+
+/* Add staggered animation for grid items */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.entreprise-parent {
+  animation: fadeIn 0.3s ease-out;
+  animation-fill-mode: both;
+}
+
+/* Add staggered delay to each card based on its position */
+.entreprise-parent:nth-child(1) { animation-delay: 0.05s; }
+.entreprise-parent:nth-child(2) { animation-delay: 0.1s; }
+.entreprise-parent:nth-child(3) { animation-delay: 0.15s; }
+.entreprise-parent:nth-child(4) { animation-delay: 0.2s; }
+.entreprise-parent:nth-child(5) { animation-delay: 0.25s; }
+.entreprise-parent:nth-child(6) { animation-delay: 0.3s; }
+.entreprise-parent:nth-child(7) { animation-delay: 0.35s; }
+.entreprise-parent:nth-child(8) { animation-delay: 0.4s; }

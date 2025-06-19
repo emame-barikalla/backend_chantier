@@ -1,0 +1,8 @@
+export enum DocumentType {
+
+  PLAN = 'PLAN',
+  PV = 'PV',
+  DOCUMENT_TECHNIQUE= 'DOCUMENT_TECHNIQUE',
+  CONTRAT= 'CONTRAT',
+  ETUDE= 'ETUDE',
+}

@@ -1,0 +1,46 @@
+<div class="checklist-container">
+  <h2>Checklist</h2>
+
+  <!-- Loading state -->
+  <div class="loading-spinner" *ngIf="loading">
+    <div class="spinner"></div>
+    <p>Loading checklist...</p>
+  </div>
+
+  <!-- Add Item Button -->
+  <button class="btn btn-primary" (click)="openAddModal()">Add Item</button>
+
+  <!-- Checklist Items -->
+  <div class="checklist-items" *ngIf="!loading">
+    <div class="checklist-item" *ngFor="let item of checklist?.items">
+      <div class="item-content">
+        <input type="checkbox" [checked]="item.isCompleted" (change)="updateItem(item.id, $event)">
+        <span [class.completed]="item.isCompleted">{{ item.description }}</span>
+      </div>
+      <button class="btn btn-danger" (click)="deleteItem(item.id)">Delete</button>
+    </div>
+  </div>
+
+  <!-- Empty state -->
+  <div class="empty-state" *ngIf="!loading && (!checklist || !checklist.items || checklist.items.length === 0)">
+    <i class="fas fa-clipboard-list"></i>
+    <p>No checklist items yet</p>
+  </div>
+
+  <!-- Add Item Modal -->
+  <div class="modal" *ngIf="showAddModal">
+    <div class="modal-content">
+      <h3>Add New Item</h3>
+      <form (ngSubmit)="addItem()">
+        <div class="form-group">
+          <label for="itemDescription">Description</label>
+          <input type="text" id="itemDescription" [(ngModel)]="newItemDescription" name="description" required>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-secondary" (click)="closeAddModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary">Add</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div> 

@@ -1,0 +1,272 @@
+<div class="compte-rendu-container">
+  <!-- Header area -->
+  <div class="compte-rendu-header">
+    <div class="header-top">
+      <div class="back-button" *ngIf="projetId" (click)="navigateToProjet()">
+        <i class="fas fa-arrow-left"></i> Retour aux projets
+      </div>
+      <div class="compte-rendus-title">
+        <i class="fas fa-clipboard-list title-icon"></i>
+        {{ projetId ? 'Comptes rendus du projet' : 'Tous les comptes rendus' }}
+      </div>
+      <div class="header-actions" *ngIf="compteRendus.length > 0">
+        <!-- Removed search input -->
+        <div class="filter-container">
+          <select [(ngModel)]="selectedTypeFilter" (change)="applyFilters()" class="type-filter">
+            <option value="">Tous les types</option>
+            <option *ngFor="let type of fileTypes" [value]="type">{{ type }}</option>
+          </select>
+          <i class="fas fa-filter filter-icon"></i>
+        </div>
+        <button class="button-cadastrarlivro" (click)="openModal()">
+          <span class="div">+</span>
+          <b class="ajouter-un-document">Ajouter un compte rendu</b>
+        </button>
+      </div>
+    </div>
+    <div class="header-bottom" *ngIf="compteRendus.length > 0">
+      <div class="documents-count">
+        <i class="fas fa-file-alt count-icon"></i>
+        {{ filteredCompteRendus.length }} comptes rendus disponibles
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading indicator -->
+  <div class="loading-indicator" *ngIf="isLoading">
+    <div class="spinner"></div>
+    <p>Chargement en cours...</p>
+  </div>
+
+  <!-- Compte rendus list -->
+  <div class="compte-rendus-content" *ngIf="!isLoading">
+    <div class="documents-empty" *ngIf="compteRendus.length === 0">
+      <i class="fas fa-file-alt empty-icon"></i>
+      <p>Aucun compte rendu n'a été ajouté</p>
+      <button class="button-cadastrarlivro" (click)="openModal()">
+        <span class="div">+</span>
+        <b class="ajouter-un-document">Ajouter un compte rendu</b>
+      </button>
+    </div>
+
+    <div class="documents-empty" *ngIf="compteRendus.length > 0 && filteredCompteRendus.length === 0">
+      <i class="fas fa-search empty-icon"></i>
+      <p>Aucun compte rendu ne correspond à votre recherche</p>
+      <button class="button-clear" (click)="clearFilters()">
+        <i class="fas fa-times"></i>
+        <b>Effacer les filtres</b>
+      </button>
+    </div>
+
+    <div class="frame-group" *ngIf="filteredCompteRendus.length > 0">
+      <div class="frame-wrapper" *ngFor="let compteRendu of paginatedCompteRendus; let i = index">
+        <div class="card1-document">
+          <div class="card1-document-child"></div>
+          <div class="div1">{{ (currentPage - 1) * itemsPerPage + i + 1 }}</div>
+          
+          <!-- Media preview section -->
+          <div class="media-preview">
+            <div *ngIf="compteRendu.fileType === 'PHOTO'" class="photo-preview">
+              <img [src]="getPreviewUrl(compteRendu.id)" alt="Aperçu" (click)="viewFile(compteRendu.id)" 
+                   loading="lazy" class="preview-image" *ngIf="previewUrls[compteRendu.id]">
+              <div class="preview-placeholder" *ngIf="!previewUrls[compteRendu.id]" (click)="loadPreview(compteRendu.id)">
+                <i class="fas fa-image preview-icon"></i>
+                <span>Aperçu</span>
+              </div>
+            </div>
+            <div *ngIf="compteRendu.fileType === 'VIDEO'" class="video-preview">
+              <div class="video-placeholder" (click)="viewFile(compteRendu.id)">
+                <i class="fas fa-play-circle preview-icon"></i>
+                <span>Lire la vidéo</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="document-content">
+            <div class="document-header-parent">
+              <div class="document-header-label">
+                <i class="fas fa-heading label-icon"></i> Titre
+              </div>
+              <div class="document-header-label">
+                <i class="fas fa-tag label-icon"></i> Type
+              </div>
+              <div class="document-header-label">
+                <i class="fas fa-user label-icon"></i> Créé par
+              </div>
+              <div class="document-header-label">
+                <i class="fas fa-calendar-alt label-icon"></i> Date
+              </div>
+            </div>
+
+            <div class="document-data-parent">
+              <div class="document-data" [title]="compteRendu.titre">{{ compteRendu.titre }}</div>
+              <div class="document-data">
+                <span class="type-badge" [ngClass]="{'photo-badge': compteRendu.fileType === 'PHOTO', 'video-badge': compteRendu.fileType === 'VIDEO'}">
+                  {{ compteRendu.fileType }}
+                </span>
+              </div>
+              <div class="document-data" [title]="compteRendu.createdByNom">{{ compteRendu.createdByNom }} {{ compteRendu.createdByPrenom }}</div>
+              <div class="document-data"[title]="compteRendu.createdAt">{{ formatDate(compteRendu.createdAt) }}</div>
+            </div>
+
+            <div class="document-description-row">
+              <div class="document-description-label">
+                <i class="fas fa-align-left desc-icon"></i> Description:
+              </div>
+              <div class="document-description-text" [title]="compteRendu.description || 'Aucune description'">
+                {{ compteRendu.description || 'Aucune description' }}
+              </div>
+            </div>
+
+            <div class="document-description-row" *ngIf="!projetId">
+              <div class="document-description-label">
+                <i class="fas fa-project-diagram desc-icon"></i> Projet:
+              </div>
+              <div class="document-description-text" [title]="compteRendu.projetNom">{{ compteRendu.projetNom }}</div>
+            </div>
+          </div>
+
+          <div class="action-buttons">
+            <button class="action-button view" (click)="viewFile(compteRendu.id)" title="Visualiser">
+              <i class="fas fa-eye"></i>
+            </button>
+            <button class="action-button download" (click)="downloadFile(compteRendu.id)" title="Télécharger">
+              <i class="fas fa-download"></i>
+            </button>
+            <button class="action-button delete" (click)="deleteCompteRendu(compteRendu.id)" title="Supprimer">
+              <i class="fas fa-trash"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Pagination Controls -->
+      <div class="pagination-controls" *ngIf="totalPages > 1">
+        <button class="pagination-button" (click)="previousPage()" [disabled]="currentPage === 1">
+          <i class="fas fa-chevron-left"></i>
+        </button>
+        
+        <div class="page-numbers">
+          <ng-container *ngIf="totalPages <= 5">
+            <button 
+              *ngFor="let page of [].constructor(totalPages); let i = index" 
+              class="page-number" 
+              [class.active]="currentPage === i + 1"
+              (click)="goToPage(i + 1)"
+            >
+              {{ i + 1 }}
+            </button>
+          </ng-container>
+          
+          <ng-container *ngIf="totalPages > 5">
+            <!-- First page -->
+            <button 
+              class="page-number" 
+              [class.active]="currentPage === 1"
+              (click)="goToPage(1)"
+            >
+              1
+            </button>
+            
+            <!-- Ellipsis if needed -->
+            <div *ngIf="currentPage > 3" class="page-number" style="border: none; cursor: default;">...</div>
+            
+            <!-- Pages around current page -->
+            <ng-container *ngFor="let page of getPaginationRange()">
+              <button 
+                *ngIf="page !== 1 && page !== totalPages"
+                class="page-number" 
+                [class.active]="currentPage === page"
+                (click)="goToPage(page)"
+              >
+                {{ page }}
+              </button>
+            </ng-container>
+            
+            <!-- Ellipsis if needed -->
+            <div *ngIf="currentPage < totalPages - 2" class="page-number" style="border: none; cursor: default;">...</div>
+            
+            <!-- Last page -->
+            <button 
+              class="page-number" 
+              [class.active]="currentPage === totalPages"
+              (click)="goToPage(totalPages)"
+            >
+              {{ totalPages }}
+            </button>
+          </ng-container>
+        </div>
+        
+        <button class="pagination-button" (click)="nextPage()" [disabled]="currentPage === totalPages">
+          <i class="fas fa-chevron-right"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Upload Modal -->
+  <div class="modal" *ngIf="showModal" #modal (click)="onModalClick($event)">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2><i class="fas fa-plus-circle modal-icon"></i> Ajouter un compte rendu</h2>
+        <button class="close-button" (click)="closeModal()">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <form [formGroup]="compteRenduForm" (ngSubmit)="onSubmit()">
+        <div class="form-group">
+          <label for="titre"><i class="fas fa-heading form-icon"></i> Titre <span class="required">*</span></label>
+          <input type="text" id="titre" formControlName="titre" required placeholder="Entrez le titre" />
+          <div class="error-message" *ngIf="compteRenduForm.get('titre')?.invalid && compteRenduForm.get('titre')?.touched">
+            Le titre est obligatoire
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="description"><i class="fas fa-align-left form-icon"></i> Description</label>
+          <textarea id="description" formControlName="description" placeholder="Entrez une description" rows="3"></textarea>
+        </div>
+        <div class="form-group">
+          <label for="fileType"><i class="fas fa-tag form-icon"></i> Type de fichier <span class="required">*</span></label>
+          <select id="fileType" formControlName="fileType" required>
+            
+            <option *ngFor="let type of fileTypes" [value]="type">{{ type }}</option>
+          </select>
+          <div class="error-message" *ngIf="compteRenduForm.get('fileType')?.invalid && compteRenduForm.get('fileType')?.touched">
+            Veuillez sélectionner un type de fichier
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="file"><i class="fas fa-file-upload form-icon"></i> Fichier <span class="required">*</span></label>
+          <div class="file-upload" [class.has-file]="selectedFile">
+            <div class="file-upload-placeholder" *ngIf="!selectedFile">
+              <i class="fas fa-cloud-upload-alt"></i>
+              <span>Glissez-déposez un fichier ou cliquez pour parcourir</span>
+            </div>
+            <input type="file" id="file" (change)="onFileSelected($event)" accept="image/*,video/*" />
+            <div class="file-info" *ngIf="selectedFile">
+              <i [class]="getFileIcon(selectedFile.type.startsWith('image') ? 'PHOTO' : 'VIDEO')"></i>
+              <span>{{ selectedFile.name }}</span>
+              <button type="button" class="remove-file" (click)="removeSelectedFile()">
+                <i class="fas fa-times"></i>
+              </button>
+            </div>
+          </div>
+          <div class="error-message" *ngIf="fileRequired && !selectedFile">
+            Veuillez sélectionner un fichier
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button
+            type="submit"
+            class="save-button"
+            [disabled]="!compteRenduForm.valid || !selectedFile || isUploading"
+          >
+            <i class="fas fa-spinner fa-spin" *ngIf="isUploading"></i>
+            <i class="fas fa-upload" *ngIf="!isUploading"></i>
+            {{ isUploading ? 'Téléchargement...' : 'Télécharger' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,21 @@
+<div class="document-details-container">
+  <!-- Loading state -->
+  <div class="loading-spinner" *ngIf="loading">
+    <div class="spinner"></div>
+    <p>Loading document details...</p>
+  </div>
+
+  <!-- Error state -->
+  <div class="error-message" *ngIf="error">
+    <i class="fas fa-exclamation-circle"></i>
+    <p>{{ error }}</p>
+    <button class="btn btn-primary" (click)="loadDocument(document?.id || 0)">Retry</button>
+  </div>
+
+  <!-- Document details -->
+  <div *ngIf="!loading && !error && document" class="document-sections">
+    <div class="section comments-section">
+      <app-document-comments [documentId]="document.id"></app-document-comments>
+    </div>
+  </div>
+</div> 

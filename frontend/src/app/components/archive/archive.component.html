@@ -1,0 +1,102 @@
+<div class="projet-container">
+  <!-- Gray header area -->
+  <div class="projet-header">
+    <div class="header-top">
+      <div class="liste-des-projets">Liste des projets archivés</div>
+      <div class="header-actions">
+        <div class="search">
+          <img class="search-s-icon" alt="Search Icon" src="/assets/images/Search-s.svg" />
+          <input
+            type="text"
+            class="text"
+            placeholder="Search"
+            [(ngModel)]="searchQuery"
+            (input)="onSearch()"
+          />
+          <div class="shortcut">
+            <div class="c">⌘/</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="header-bottom">
+      <div class="frame-child">
+        <div class="projets-existants">{{ filteredProjets.length }} projets archivés</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main content (table) -->
+  <div class="projets-content">
+    <div class="frame-group">
+      <div class="frame-wrapper" *ngFor="let projet of paginatedProjets; let i = index">
+        <div class="card1-livros">
+          <div class="card1-livros-child"></div>
+          <div class="div1">{{ (currentPage - 1) * itemsPerPage + i + 1 }}</div>
+          
+          <div class="telephone-parent">
+            <div class="telephone">Nom</div>
+            <div class="telephone">Budget</div>
+            <div class="telephone">Date debut</div>
+            <div class="telephone">Date fin</div>
+            <div class="telephone">Status</div>
+          </div>
+          <div class="parent">
+            <div class="nktt-sukuk">{{ projet.nom }}</div>
+            <div class="nktt-sukuk">{{ projet.budget || 'N/A' }}</div>
+            <div class="nktt-sukuk">{{ projet.dateDebut }}</div>
+            <div class="nktt-sukuk">{{ projet.dateFin }}</div>
+            <div class="nktt-sukuk">
+              <span
+                class="status-badge"
+                [ngClass]="{
+                  'badge-en-cours': projet.status === 'EN_COURS',
+                  'badge-termine': projet.status === 'TERMINE',
+                  'badge-planifie': projet.status === 'PLANIFIE',
+                  'badge-retarde': projet.status === 'RETARDE',
+                  'badge-bloque': projet.status === 'BLOQUE'
+                }"
+              >
+                {{ projet.status }}
+              </span>
+            </div>
+          </div>
+          <div class="actions-wrapper">
+            <div class="actions-column middle-column">
+              <div class="action-label">Documents</div>
+              <div class="action-item">
+                <i class="fas fa-file-alt icon-documents" (click)="viewDocuments(projet.id)" title="Documents"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pagination Controls -->
+    <div class="pagination-controls" *ngIf="totalPages > 1">
+      <button class="pagination-button" (click)="previousPage()" [disabled]="currentPage === 1">
+        <i class="fas fa-chevron-left"></i>
+      </button>
+      
+      <div class="page-numbers">
+        <button 
+          *ngFor="let page of [].constructor(totalPages); let i = index" 
+          class="page-number" 
+          [class.active]="currentPage === i + 1"
+          (click)="goToPage(i + 1)"
+        >
+          {{ i + 1 }}
+        </button>
+      </div>
+      
+      <button class="pagination-button" (click)="nextPage()" [disabled]="currentPage === totalPages">
+        <i class="fas fa-chevron-right"></i>
+      </button>
+    </div>
+
+    <div class="pagination-info" *ngIf="totalPages > 1">
+      Page {{ currentPage }} of {{ totalPages }} - Showing {{ paginatedProjets.length }} of {{ filteredProjets.length }} projects
+    </div>
+  </div>
+</div>

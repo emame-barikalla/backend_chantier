@@ -1,0 +1,74 @@
+<div class="comments-container">
+  <div class="section-header">
+    <button class="btn-back" (click)="navigateBackToDocument()">
+      <i class="fas fa-arrow-left"></i> Retour au document
+    </button>
+    <h3>Commentaires</h3>
+    <button class="btn btn-primary" (click)="openAddModal()" *ngIf="isControleurTechnique">
+      <i class="fas fa-plus"></i> Ajouter un commentaire
+    </button>
+  </div>
+
+  <!-- Loading state -->
+  <div class="loading-spinner" *ngIf="loading">
+    <div class="spinner"></div>
+    <p>Chargement des commentaires...</p>
+  </div>
+
+  <!-- Comments List -->
+  <div class="comments-list" *ngIf="!loading">
+    <div class="comment-item" *ngFor="let comment of comments">
+      <div class="comment-header">
+        <div class="user-info">
+          <i class="fas fa-user-circle"></i>
+          <span>{{ comment.user.email }} {{ comment.user.prenom || '' }}</span>
+        </div>
+        <span class="comment-date">{{ comment.createdAt | date:'dd/MM/yyyy HH:mm' }}</span>
+      </div>
+      <div class="comment-content" *ngIf="editingComment?.id !== comment.id">
+        <p>{{ comment.comment }}</p>
+        <div class="comment-actions" *ngIf="isControleurTechnique">
+          <button class="btn-icon" (click)="editComment(comment)" title="Modifier">
+            <i class="fas fa-edit"></i>
+          </button>
+          <button class="btn-icon" (click)="deleteComment(comment.id)" title="Supprimer">
+            <i class="fas fa-trash-alt"></i>
+          </button>
+        </div>
+      </div>
+      <div class="comment-edit" *ngIf="editingComment?.id === comment.id">
+        <textarea [(ngModel)]="newComment" rows="3" class="form-textarea" placeholder="Modifiez votre commentaire ici..."></textarea>
+        <div class="edit-actions">
+          <button class="btn btn-secondary" (click)="closeModal()">Annuler</button>
+          <button class="btn btn-primary" (click)="updateComment()">Enregistrer</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Empty state -->
+  <div class="empty-state" *ngIf="!loading && (!comments || comments.length === 0)">
+    <i class="fas fa-comments"></i>
+    <p>Aucun commentaire pour ce document</p>
+    <p>Soyez le premier à ajouter un commentaire</p>
+  </div>
+
+  <!-- Add Comment Modal -->
+  <div class="modal" *ngIf="showModal && !editingComment">
+    <div class="modal-content">
+      <h3>Ajouter un commentaire</h3>
+      <form (ngSubmit)="addComment()">
+        <div class="form-group">
+          <textarea id="commentText" [(ngModel)]="newComment" name="comment" rows="4" class="form-textarea" 
+            placeholder="Écrivez votre commentaire ici..." required></textarea>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-secondary" (click)="closeModal()">Annuler</button>
+          <button type="submit" class="btn btn-primary" [disabled]="!newComment.trim()">
+            <i class="fas fa-paper-plane"></i> Ajouter
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

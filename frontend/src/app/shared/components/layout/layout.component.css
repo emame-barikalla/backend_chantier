@@ -1,0 +1,54 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: hidden; /* Prevent scrolling on the body */
+ 
+}
+
+:host {
+  display: block;
+  width: 100%;
+  height: 100vh;
+  position: relative;
+  border-radius: 4px;
+  background-color: #1e1e2d;
+  overflow: hidden; /* Prevent scrolling on the layout */
+  font-family: Poppins, sans-serif;
+  color: #fff;
+  box-sizing: border-box;
+}
+
+.layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  
+}
+
+.main-content {
+  flex: 1;
+  display: flex;
+  
+}
+
+.content {
+  flex: 1;
+  padding: 10px;
+  margin-left: 90px; /* Reduced from 110px to move content to the left */
+  position: relative;
+}
+
+.content-area {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  
+}
+
+@media (max-width: 1200px) {
+  .content {
+    margin-left: 75px; /* Reduced from 90px */
+    padding: 15px;
+  }
+}

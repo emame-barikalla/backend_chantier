@@ -1,0 +1,218 @@
+<div class="task-container">
+    <!-- Gray header area -->
+    <div class="task-header">
+      <div class="header-top">
+        <div class="liste-des-tasks">Liste des tâches</div>
+        <div class="header-actions">
+          <div class="search">
+            <i class="fas fa-search search-s-icon"></i>
+            <input
+              type="text"
+              class="text"
+              placeholder="Search"
+              [(ngModel)]="searchQuery"
+              (input)="onSearch()"
+            />
+            <div class="shortcut">
+              <div class="c">⌘/</div>
+            </div>
+          </div>
+          <button class="button-cadastrarlivro" (click)="openModal()" *ngIf="isMaitreOeuvre()">
+            <div class="button-cadastrarlivro-child"></div>
+            <span class="div">+</span>
+            <b class="ajouter-un-task">Créer une tâche</b>
+          </button>
+        </div>
+      </div>
+      <div class="header-bottom">
+        <div class="frame-child">
+          <div class="tasks-existants">{{ filteredTasks.length }} tâches existantes</div>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Kanban Board -->
+    <div class="tasks-content">
+      <div class="kanban-board">
+        <!-- À Faire Column -->
+        <div class="kanban-column" cdkDropList [id]="'todoList'" [cdkDropListConnectedTo]="['inProgressList','doneList']" [cdkDropListData]="getTasksByStatus(Statut.A_FAIRE)" (cdkDropListDropped)="onTaskDrop($event)">
+          <div class="column-header">
+            <div class="column-title-wrapper">
+              <i class="fas fa-tasks column-icon"></i>
+              <h3 class="column-title">À Faire</h3>
+            </div>
+            <span class="column-count">{{ getTasksByStatus(Statut.A_FAIRE).length }}</span>
+          </div>
+          <div class="column-content">
+            <div class="frame-group">
+              <div class="frame-wrapper" *ngFor="let task of getTasksByStatus(Statut.A_FAIRE)" cdkDrag>
+                <div class="card1-livros">
+                  <div class="card1-livros-child"></div>
+                  <div class="task-content">
+                    <div class="task-description">{{ task.description }}</div>
+                    <div class="task-details">
+                      <div class="task-detail">
+                        <i class="fas fa-calendar"></i>
+                        <span>{{ task.date | date:'dd/MM/yyyy' }}</span>
+                      </div>
+                      <div class="task-detail">
+                        <i class="fas fa-project-diagram"></i>
+                        <span>{{ task.projetNom }}</span>
+                      </div>
+                      <div class="task-detail">
+                        <i class="fas fa-user"></i>
+                        <span>{{ task.assigneeNom }}</span>
+                      </div>
+                    </div>
+                    <div class="task-actions" *ngIf="isMaitreOeuvre()">
+                      <i class="fas fa-edit icon-edit" (click)="openModal(task)"></i>
+                      <i class="fas fa-trash icon-delete" (click)="deleteTask(task.id)"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+  
+        <!-- En Cours Column -->
+        <div class="kanban-column" cdkDropList [id]="'inProgressList'" [cdkDropListConnectedTo]="['todoList','doneList']" [cdkDropListData]="getTasksByStatus(Statut.EN_COURS)" (cdkDropListDropped)="onTaskDrop($event)">
+          <div class="column-header">
+            <div class="column-title-wrapper">
+              <i class="fas fa-spinner column-icon"></i>
+              <h3 class="column-title">En Cours</h3>
+            </div>
+            <span class="column-count">{{ getTasksByStatus(Statut.EN_COURS).length }}</span>
+          </div>
+          <div class="column-content">
+            <div class="frame-group">
+              <div class="frame-wrapper" *ngFor="let task of getTasksByStatus(Statut.EN_COURS)" cdkDrag>
+                <div class="card1-livros">
+                  <div class="card1-livros-child"></div>
+                  <div class="task-content">
+                    <div class="task-description">{{ task.description }}</div>
+                    <div class="task-details">
+                      <div class="task-detail">
+                        <i class="fas fa-calendar"></i>
+                        <span>{{ task.date | date:'dd/MM/yyyy' }}</span>
+                      </div>
+                      <div class="task-detail">
+                        <i class="fas fa-project-diagram"></i>
+                        <span>{{ task.projetNom }}</span>
+                      </div>
+                      <div class="task-detail">
+                        <i class="fas fa-user"></i>
+                        <span>{{ task.assigneeNom }}</span>
+                      </div>
+                    </div>
+                    <div class="task-actions" *ngIf="isMaitreOeuvre()">
+                      <i class="fas fa-edit icon-edit" (click)="openModal(task)"></i>
+                      <i class="fas fa-trash icon-delete" (click)="deleteTask(task.id)"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+  
+        <!-- Terminé Column -->
+        <div class="kanban-column" cdkDropList [id]="'doneList'" [cdkDropListConnectedTo]="['todoList','inProgressList']" [cdkDropListData]="getTasksByStatus(Statut.TERMINE)" (cdkDropListDropped)="onTaskDrop($event)">
+          <div class="column-header">
+            <div class="column-title-wrapper">
+              <i class="fas fa-check-circle column-icon"></i>
+              <h3 class="column-title">Terminé</h3>
+            </div>
+            <span class="column-count">{{ getTasksByStatus(Statut.TERMINE).length }}</span>
+          </div>
+          <div class="column-content">
+            <div class="frame-group">
+              <div class="frame-wrapper" *ngFor="let task of getTasksByStatus(Statut.TERMINE)" cdkDrag>
+                <div class="card1-livros">
+                  <div class="card1-livros-child"></div>
+                  <div class="task-content">
+                    <div class="task-description">{{ task.description }}</div>
+                    <div class="task-details">
+                      <div class="task-detail">
+                        <i class="fas fa-calendar"></i>
+                        <span>{{ task.date | date:'dd/MM/yyyy' }}</span>
+                      </div>
+                      <div class="task-detail">
+                        <i class="fas fa-project-diagram"></i>
+                        <span>{{ task.projetNom }}</span>
+                      </div>
+                      <div class="task-detail">
+                        <i class="fas fa-user"></i>
+                        <span>{{ task.assigneeNom }}</span>
+                      </div>
+                    </div>
+                    <div class="task-actions" *ngIf="isMaitreOeuvre()">
+                      <i class="fas fa-edit icon-edit" (click)="openModal(task)"></i>
+                      <i class="fas fa-trash icon-delete" (click)="deleteTask(task.id)"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Modal -->
+    <div class="modal" *ngIf="showModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>{{ editingTask ? 'Modifier la tâche' : 'créer une tâche' }}</h2>
+          <button class="close-button" (click)="closeModal()">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <form [formGroup]="taskForm" (ngSubmit)="onSubmit()">
+          <div class="form-group">
+            <label for="description">Description</label>
+            <input type="text" id="description" formControlName="description" required />
+          </div>
+          <div class="form-group">
+            <label for="date">Date</label>
+            <input type="date" id="date" formControlName="date" />
+          </div>
+          <div class="form-group">
+            <label for="projetId">Projet</label>
+            <select id="projetId" formControlName="projetId" required>
+              <option value="">Sélectionner un projet</option>
+              <option *ngFor="let project of projects" [value]="project.id">
+                {{ project.nom }}
+              </option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="assigneeId">Assigné à</label>
+            <select id="assigneeId" formControlName="assigneeId" required>
+              <option value="">Sélectionner un utilisateur</option>
+              <option *ngFor="let user of projectUsers[taskForm.get('projetId')?.value] || []" [value]="user.userId">
+                {{ user.userNom }}
+              </option>
+            </select>
+          </div>
+          <!-- <div class="form-group">
+            <label for="statut">Statut</label>
+            <select id="statut" formControlName="statut">
+              <option *ngFor="let status of ['A_FAIRE', 'EN_COURS', 'TERMINE']" [value]="status">
+                {{ status }}
+              </option>
+            </select>
+          </div> -->
+          <div class="modal-footer">
+            <button
+              type="submit"
+              class="save-button"
+              [disabled]="!taskForm.valid || isLoading"
+            >
+              {{ isLoading ? 'Saving...' : 'Enregistrer' }}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>

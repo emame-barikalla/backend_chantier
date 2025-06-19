@@ -1,0 +1,85 @@
+.sidebar {
+  position: absolute;
+  top: 95px; /* Increased from 85px to move sidebar items lower */
+  left: 20px; /* Increased from 10px to move sidebar to the right */
+  width: 40px;
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 30px; /* Reduced from 40px */
+  padding-top: 10px; /* Added padding to move items down */
+}
+
+.sidebar-nav .nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  color: #fff;
+  font-size: 12px; /* Reduced from 12px */
+  font-weight: 500;
+  width: 50px; /* Reduced from 50px */
+  height: 50px; /* Reduced from 50px */
+  text-align: center;
+  padding: 4px; /* Reduced from 5px */
+  border-radius: 5px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.sidebar-nav .nav-item .nav-icon {
+  width: 25px; /* Reduced from 30px */
+  height: 25px; /* Reduced from 30px */
+  font-size: 15px; /* Reduced from 20px */
+  border-radius: 50%;
+  transition: background-color 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sidebar-nav .nav-item.active {
+  background-color: transparent;
+  color: #fff;
+}
+
+.sidebar-nav .nav-item.active .nav-icon {
+  background-color: #d0af56;
+}
+
+.sidebar-nav .nav-item.active span {
+  color: #d0af56;
+}
+
+.sidebar-nav .nav-item:focus {
+  box-shadow: 0 0 0 2px #d0af56;
+  outline: none;
+}
+
+@media (max-width: 1200px) {
+  .sidebar {
+    width: 40px;
+    left: 15px; /* Increased from 8px */
+  }
+  .sidebar-nav .nav-item {
+    width: 35px; /* Reduced from 40px */
+    height: 40px; /* Reduced from 50px */
+    border-radius: 5px;
+  }
+  .sidebar-nav .nav-icon {
+    width: 25px; /* Reduced from 30px */
+    height: 25px; /* Reduced from 30px */
+    font-size: 16px; /* Reduced from 18px */
+    border-radius: 50%;
+  }
+}
+
+@media (max-height: 800px) {
+  .sidebar {
+    top: 75px; /* Reduced from 110px */
+  }
+  .sidebar-nav {
+    gap: 25px; /* Reduced from 30px */
+  }
+}

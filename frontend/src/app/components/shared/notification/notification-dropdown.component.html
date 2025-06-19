@@ -1,0 +1,41 @@
+<div class="notification-dropdown" *ngIf="showDropdown">
+  <div class="notification-header">
+    <h3>Notifications</h3>
+    <div class="notification-actions">
+      <button class="mark-all-read" (click)="markAllAsRead()" [disabled]="isLoading">
+        <i class="fas fa-check-double"></i> Tout marquer comme lu
+      </button>
+      <button class="close-button" (click)="onCloseClick($event)">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+  </div>
+  
+  <div class="notification-content">
+    <div *ngIf="isLoading" class="loading-indicator">
+      <i class="fas fa-spinner fa-spin"></i> Chargement...
+    </div>
+
+    <div *ngIf="!isLoading && notifications.length === 0" class="empty-state">
+      <i class="fas fa-bell-slash"></i>
+      <p>Pas de notifications</p>
+    </div>
+
+    <ul class="notification-list" *ngIf="!isLoading && notifications.length > 0">
+      <li *ngFor="let notification of notifications" 
+          [ngClass]="getNotificationClass(notification)"
+          (click)="navigateToNotification(notification)">
+        <div class="notification-icon">
+          <i [ngClass]="getNotificationIcon(notification.type)"></i>
+        </div>
+        <div class="notification-details">
+          <p class="notification-message">{{ notification.message }}</p>
+          <p class="notification-time">{{ getTimeAgo(notification.createdAt) }}</p>
+        </div>
+        <div class="notification-status" *ngIf="!notification.read">
+          <span class="unread-indicator"></span>
+        </div>
+      </li>
+    </ul>
+  </div>
+</div>

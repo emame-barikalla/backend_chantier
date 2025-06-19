@@ -1,0 +1,205 @@
+<div class="document-container">
+  <!-- Header area -->
+  <div class="document-header">
+    <div class="header-top">
+      <div class="back-button" *ngIf="projetId" (click)="navigateToProjet()">
+        <i class="fas fa-arrow-left"></i> Retour aux projets
+      </div>
+      <div class="documents-title">{{ projetId ? 'Documents du projet' : 'Tous les documents' }}</div>
+      <div class="header-actions" *ngIf="documents.length > 0">
+        <div class="search">
+          <i class="fas fa-search search-s-icon"></i>
+          <input
+            type="text"
+            placeholder="Rechercher un document..."
+            [(ngModel)]="searchQuery"
+            (input)="applyFilters()"
+            class="text"
+          />
+          
+        </div>
+        <div class="filter-container">
+          <select [(ngModel)]="selectedTypeFilter" (change)="applyFilters()" class="type-filter">
+            <option value="">Tous les types</option>
+            <option *ngFor="let type of documentTypes" [value]="type">{{ type }}</option>
+          </select>
+        </div>
+        <button class="button-cadastrarlivro" (click)="openModal()">
+          <div class="button-cadastrarlivro-child"></div>
+          <span class="div">+</span>
+          <b class="ajouter-un-document">ajouter un document</b>
+        </button>
+      </div>
+    </div>
+    <div class="header-bottom">
+      <div class="frame-child" *ngIf="documents.length > 0">
+
+        <div class="documents-count">{{ filteredDocuments.length }} documents disponibles</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading indicator -->
+  <div class="loading-indicator" *ngIf="isLoading">
+    <div class="spinner"></div>
+    <p>Chargement en cours...</p>
+  </div>
+
+  <!-- Documents list -->
+  <div class="documents-content" *ngIf="!isLoading">
+    <div class="documents-empty" *ngIf="documents.length === 0">
+      <i class="fas fa-file-alt empty-icon"></i>
+      <p>Aucun document n'a été ajouté à ce projet</p>
+      <button class="button-cadastrarlivro" (click)="openModal()">
+        <div class="button-cadastrarlivro-child"></div>
+        <span class="div">+</span>
+        <b class="ajouter-un-document">Ajouter un document</b>
+      </button>
+    </div>
+
+    <div class="documents-empty" *ngIf="documents.length > 0 && filteredDocuments.length === 0">
+      <i class="fas fa-search empty-icon"></i>
+      <p>Aucun document correspond à votre recherche</p>
+      <button class="button-clear" (click)="clearFilters()">
+        <i class="fas fa-times"></i>
+        <b>Effacer les filtres</b>
+      </button>
+    </div>
+
+    <div class="frame-group" *ngIf="filteredDocuments.length > 0">
+      <div class="frame-wrapper" *ngFor="let document of paginatedDocuments; let i = index">
+        <div class="card1-document">
+          <div class="card1-document-child"></div>
+          <!-- Replace the index calculation to show correct numbers even when paginated -->
+          <div class="div1">{{ (currentPage - 1) * itemsPerPage + i + 1 }}</div>
+          <div class="document-icon">
+            <i [class]="getFileIcon(document.fileName)"></i>
+          </div>
+
+          <div class="document-header-parent">
+            <div class="document-header-label">Titre</div>
+            <div class="document-header-label">Type</div>
+            <div class="document-header-label">Taille</div>
+            <div class="document-header-label">Date</div>
+          </div>
+
+          <div class="document-data-parent">
+            <div class="document-data">{{ document.titre }}</div>
+            <div class="document-data">{{ document.type }}</div>
+            <div class="document-data">{{ getFileSize(document.fileSize) }}</div>
+            <div class="document-data">{{ document.date }}</div>
+          </div>
+
+          <div class="document-description-row">
+            <div class="document-description-label">Description:</div>
+            <div class="document-description-text">{{ document.description || 'Aucune description' }}</div>
+          </div>
+
+          <button class="action-button download" (click)="downloadDocument(document.id, document.fileName)" title="telecharger">
+            <i class="fas fa-download"></i>
+          </button>
+          <button class="action-button view" (click)="viewDocument(document.id, document.fileName)" title="Visualiser">
+            <i class="fas fa-eye"></i>
+          </button>
+          <button class="action-button details" [routerLink]="['/documents', document.id]" title="Commentaires">
+            <i class="fas fa-comments"></i>
+          </button>
+          <button class="action-button delete" (click)="deleteDocument(document.id)" title="Supprimer">
+            <i class="fas fa-trash"></i>
+          </button>
+        </div>
+      </div>
+      
+      <!-- Pagination Controls -->
+      <div class="pagination-controls" *ngIf="totalPages > 1">
+        <button class="pagination-button" (click)="previousPage()" [disabled]="currentPage === 1">
+          <i class="fas fa-chevron-left"></i>
+        </button>
+        
+        <div class="page-numbers">
+          <button 
+            *ngFor="let page of [].constructor(totalPages); let i = index" 
+            class="page-number" 
+            [class.active]="currentPage === i + 1"
+            (click)="goToPage(i + 1)"
+          >
+            {{ i + 1 }}
+          </button>
+        </div>
+        
+        <button class="pagination-button" (click)="nextPage()" [disabled]="currentPage === totalPages">
+          <i class="fas fa-chevron-right"></i>
+        </button>
+      </div>
+
+      <!-- <div class="pagination-info" *ngIf="totalPages > 1">
+        Page {{ currentPage }} de {{ totalPages }} - voir {{ paginatedDocuments.length }} de {{ filteredDocuments.length }} documents
+      </div> -->
+    </div>
+  </div>
+
+  <!-- Upload Document Modal -->
+  <div class="modal" *ngIf="showModal" #modal (click)="onModalClick($event)">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>ajouter un document</h2>
+        <button class="close-button" (click)="closeModal()">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <form [formGroup]="documentForm" (ngSubmit)="onSubmit()">
+        <div class="form-group">
+          <label for="titre">Titre <span class="required">*</span></label>
+          <input type="text" id="titre" formControlName="titre" required placeholder="Entrez le titre du document" />
+          <div class="error-message" *ngIf="documentForm.get('titre')?.invalid && documentForm.get('titre')?.touched">
+            Le titre est obligatoire
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="description">Description</label>
+          <input type="text" id="description" formControlName="description" placeholder="Entrez une description du document" />
+        </div>
+        <div class="form-group">
+          <label for="type">Type de document <span class="required">*</span></label>
+          <select id="type" formControlName="type" required>
+            
+            <option *ngFor="let type of documentTypes" [value]="type">{{ type }}</option>
+          </select>
+          <div class="error-message" *ngIf="documentForm.get('type')?.invalid && documentForm.get('type')?.touched">
+            Veuillez sélectionner un type de document
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="file">Fichier <span class="required">*</span></label>
+          <div class="file-upload" [class.has-file]="selectedFile">
+            <div class="file-upload-placeholder" *ngIf="!selectedFile">
+              <i class="fas fa-cloud-upload-alt"></i>
+              <span>Glissez-déposez un fichier ou cliquez pour parcourir</span>
+            </div>
+            <input type="file" id="file" (change)="onFileSelected($event)" />
+            <div class="file-info" *ngIf="selectedFile">
+              <i [class]="getFileIcon(selectedFile.name)"></i>
+              <span>{{ selectedFile.name }} ({{ getFileSize(selectedFile.size) }})</span>
+              <button type="button" class="remove-file" (click)="removeSelectedFile()">
+                <i class="fas fa-times"></i>
+              </button>
+            </div>
+          </div>
+          <div class="error-message" *ngIf="fileRequired && !selectedFile">
+            Veuillez sélectionner un fichier
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button
+            type="submit"
+            class="save-button"
+            [disabled]="!documentForm.valid || !selectedFile || isLoading"
+          >
+            <i class="fas fa-spinner fa-spin" *ngIf="isUploading"></i>
+            {{ isUploading ? 'Téléchargement...' : 'Télécharger' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

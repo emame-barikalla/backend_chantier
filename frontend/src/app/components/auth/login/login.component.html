@@ -1,0 +1,80 @@
+<section class="sign-in">
+  <div class="layout">
+    <div class="image-column">
+      <img
+        src="https://cdn.builder.io/api/v1/image/assets/TEMP/0c3d7a7c968e52fc0319acfe569732a942ee3cba245108ba05df69e9ca52cd1b?placeholderIfAbsent=true&apiKey=aa48d3c88415426b8c6ace7d647b5531"
+        alt="Sign in illustration"
+        class="hero-image"
+      />
+    </div>
+    <div class="content-column">
+      <div class="content-wrapper">
+        <div class="content-container">
+          <!-- Header Section -->
+          <header class="header">
+            <h1 class="title">Bienvenue !</h1>
+            <p class="signup-text">
+              <!-- <span>Vouz n'avez pas un compte?</span>
+              <span class="signup-link" (click)="onSignUp()">S'inscrire</span> -->
+            </p>
+          </header>
+
+          <!-- Form Section -->
+          <div class="form-container">
+            <form class="auth-form" (ngSubmit)="onSubmit()">
+              <div class="form-fields">
+                <input
+                  type="email"
+                  placeholder="Email"
+                  class="email-input"
+                  [(ngModel)]="email"
+                  name="email"
+                  [class.error]="error && !email"
+                />
+                <div class="password-field" [class.error]="error && !password">
+                  <input
+                    [type]="showPassword ? 'text' : 'password'"
+                    placeholder="mot de passe"
+                    class="password-input"
+                    [(ngModel)]="password"
+                    name="password"
+                  />
+                  <button 
+                    type="button" 
+                    class="toggle-password-btn" 
+                    (click)="togglePasswordVisibility()"
+                  >
+                    <i class="toggle-icon" [ngClass]="showPassword ? 'fas fa-eye' : 'fas fa-eye-slash'"></i>
+                  </button>
+                </div>
+                <!-- <button
+                  type="button"
+                  class="forgot-password"
+                  (click)="onForgotPassword()"
+                >
+                  mot de passe oublié?
+                </button> -->
+              </div>
+
+              <!-- Error Message -->
+              <div class="error-message" *ngIf="error">
+                {{ error }}
+              </div>
+
+              <button 
+                type="submit" 
+                class="submit-button" 
+                [disabled]="isLoading"
+              >
+                <span *ngIf="!isLoading">S'authentifier</span>
+                <span *ngIf="isLoading" class="loading-spinner">
+                  <i class="fas fa-spinner fa-spin"></i> Chargement...
+                </span>
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

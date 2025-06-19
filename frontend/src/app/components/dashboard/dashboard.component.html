@@ -1,0 +1,139 @@
+<div class="dashboard-wrapper">
+  <div class="dashboard-container">
+    <!-- Dashboard Header -->
+    <div class="dashboard-header">
+      <h1>Tableau de bord</h1>
+      <p>Vue d'ensemble des projets, et activités</p>
+    </div>
+
+    <div class="dashboard-content">
+      <!-- Stats Cards -->
+      <div class="stats-container">
+        <!-- Projects Stats -->
+        <div class="stat-card projects">
+          <i class="fas fa-project-diagram stat-icon"></i>
+          <div class="stat-value">{{ totalProjects }}</div>
+          <div class="stat-label">Projets Actifs</div>
+          <div class="stat-change change-positive">
+            <i class="fas fa-arrow-up"></i>
+            <span>{{ projectsIncrease }}% depuis le mois dernier</span>
+          </div>
+        </div>
+
+        <!-- Enterprise Stats -->
+        <div class="stat-card enterprise">
+          <i class="fas fa-building stat-icon"></i>
+          <div class="stat-value">{{ totalEnterprises }}</div>
+          <div class="stat-label">Entreprises</div>
+          <div class="stat-change change-positive">
+            <i class="fas fa-arrow-up"></i>
+            <span>{{ enterprisesIncrease }}% depuis le mois dernier</span>
+          </div>
+        </div>
+
+        <!-- Clients Stats -->
+        <div class="stat-card clients">
+          <i class="fas fa-users stat-icon"></i>
+          <div class="stat-value">{{ totalClients }}</div>
+          <div class="stat-label">Clients</div>
+          <div class="stat-change change-positive">
+            <i class="fas fa-arrow-up"></i>
+            <span>{{ clientsIncrease }}% depuis le mois dernier</span>
+          </div>
+        </div>
+
+        <!-- Budget Stats -->
+        <div class="stat-card revenue">
+          <i class="fas fa-money-check-alt stat-icon"></i>
+          <div class="stat-value">{{ totalBudget }} MRU</div>
+          <div class="stat-label">Budget Total</div>
+          <div class="stat-change change-positive">
+            <i class="fas fa-arrow-up"></i>
+            <span>{{ budgetIncrease }}% depuis le mois dernier</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Status Distribution -->
+      <div class="status-distribution">
+        <div class="status-item planifie">
+          <div class="status-count">{{ statusCounts.planifie }}</div>
+          <div class="status-label">PLANIFIÉ</div>
+        </div>
+        <div class="status-item en-cours">
+          <div class="status-count">{{ statusCounts.enCours }}</div>
+          <div class="status-label">EN COURS</div>
+        </div>
+        <div class="status-item retarde">
+          <div class="status-count">{{ statusCounts.retarde }}</div>
+          <div class="status-label">RETARDÉ</div>
+        </div>
+        <div class="status-item bloque">
+          <div class="status-count">{{ statusCounts.bloque }}</div>
+          <div class="status-label">BLOQUÉ</div>
+        </div>
+        <div class="status-item termine">
+          <div class="status-count">{{ statusCounts.termine }}</div>
+          <div class="status-label">TERMINÉ</div>
+        </div>
+      </div>
+
+      <!-- Charts Section -->
+      <div class="charts-container">
+        <!-- Project Progress Chart -->
+        <div class="chart-card">
+          <div class="chart-header">
+            <h2 class="chart-title">Progression des Projets</h2>
+            <div class="chart-actions">
+              <!-- <button class="chart-timeframe" [class.active]="selectedTimeframe === 'week'" (click)="changeTimeframe('week')">7j</button> -->
+              <button class="chart-timeframe" [class.active]="selectedTimeframe === 'month'" (click)="changeTimeframe('month')">30j</button>
+              <button class="chart-timeframe" [class.active]="selectedTimeframe === 'year'" (click)="changeTimeframe('year')">Année</button>
+            </div>
+          </div>
+          <div class="chart-content">
+            <!-- Chart will be rendered here -->
+            <canvas id="projectProgressChart"></canvas>
+          </div>
+        </div>
+
+        <!-- Project Categories Chart -->
+        <div class="chart-card">
+          <div class="chart-header">
+            <h2 class="chart-title">Répartition par Catégorie</h2>
+          </div>
+          <div class="chart-content">
+            <!-- Chart will be rendered here -->
+            <canvas id="categoryDistributionChart"></canvas>
+          </div>
+          <div class="category-distribution">
+            <div class="category-badge badge-medical">
+              <span>Medical</span>
+              <span>{{ categoryCounts.medical }}</span>
+            </div>
+            <div class="category-badge badge-software">
+              <span>Software</span>
+              <span>{{ categoryCounts.software }}</span>
+            </div>
+            <div class="category-badge badge-residentiel">
+              <span>Résidentiel</span>
+              <span>{{ categoryCounts.residentiel }}</span>
+            </div>
+            <div class="category-badge badge-commercial">
+              <span>Commercial</span>
+              <span>{{ categoryCounts.commercial }}</span>
+            </div>
+            <div class="category-badge badge-institutionnel">
+              <span>Institutionnel</span>
+              <span>{{ categoryCounts.institutionnel }}</span>
+            </div>
+            <div class="category-badge badge-autre">
+              <span>Autre</span>
+              <span>{{ categoryCounts.autre }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

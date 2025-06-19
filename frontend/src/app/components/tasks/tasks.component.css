@@ -1,0 +1,681 @@
+.task-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+   
+  }
+  
+  /* Gray header area */
+  .task-header {
+    border-radius: 25px 25px 0 0;
+    background-color: #F1F3F5;
+    width: 100%;
+    height: 100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 10px 20px;
+    box-sizing: border-box;
+  }
+  
+  .header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 5px;
+  }
+  
+  .header-bottom {
+    display: flex;
+    align-items: center;
+  }
+  
+  .liste-des-tasks {
+    font-size: 24px;
+    line-height: 28px;
+    font-weight: 500;
+    color: #000;
+    font-family: Poppins, sans-serif;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 400px;
+  }
+  
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+  }
+  
+  .search {
+    border-radius: 10px;
+    background-color: #fff;
+    border: 1px solid #d0af56;
+    box-sizing: border-box;
+    width: 220px;
+    height: 40px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 4px 6px 4px 17px;
+    gap: 4px;
+    font-size: 14px;
+    color: rgba(0, 0, 0, 0.2);
+    font-family: Inter, sans-serif;
+  }
+  
+  .search-s-icon {
+    width: 16px;
+    height: 16px;
+  }
+  
+  .text {
+    border: none;
+    outline: none;
+    font-size: 14px;
+    line-height: 20px;
+    color: rgba(0, 0, 0, 0.2);
+    font-family: Inter, sans-serif;
+    width: 100%;
+  }
+  
+  .shortcut {
+    height: 18px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+    font-size: 12px;
+  }
+  
+  .c {
+    line-height: 18px;
+  }
+  
+  .button-cadastrarlivro {
+    position: relative;
+    width: 180px;
+    height: 40px;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.3s ease;
+  }
+  
+  .button-cadastrarlivro:hover {
+    opacity: 0.9;
+  }
+  
+  .button-cadastrarlivro-child {
+    position: absolute;
+    top: 0;
+    left: 0;
+    border-radius: 10px;
+    width: 100%;
+    height: 100%;
+    background-color: #d0af56;
+    z-index: 0;
+  }
+  
+  .ajouter-un-task {
+    position: relative;
+    font-size: 14px;
+    font-weight: 600;
+    color: #fbfbfb;
+    font-family: Poppins, sans-serif;
+    z-index: 1;
+    white-space: nowrap;
+    margin-left: 0;
+  }
+  
+  .div {
+    font-size: 24px;
+    font-weight: 500;
+    font-family: Raleway, sans-serif;
+    color: #fbfbfb;
+    z-index: 1;
+    margin-right: 8px;
+  }
+  
+  .frame-child {
+    position: relative;
+    border-radius: 30px;
+    background-color: #fff;
+    width: 137px;
+    height: 24px;
+    overflow: hidden;
+  }
+  
+  .tasks-existants {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 4px;
+    font-size: 11px;
+    line-height: 21px;
+    font-weight: 500;
+    color: #d0af56;
+    font-family: Poppins, sans-serif;
+  }
+  
+  /* Main content area */
+  .tasks-content {
+    padding: 0 20px 20px 20px;
+    background-color: #fff;
+    border-radius: 0 0 25px 25px;
+    width: 100%;
+    height: calc(100% - 100px);
+    overflow-y: hidden;
+    box-sizing: border-box;
+    position: relative;
+    z-index: 1;
+  }
+  
+  .frame-group {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    margin-top: 0;
+  }
+  
+  .frame-wrapper {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  /* Task Card Styles */
+  .card1-livros {
+    position: relative;
+    width: 90%;
+    height: 70%;
+    margin-bottom: 1px;
+    cursor: move;
+    transition: transform 0.2s ease;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+  }
+  
+  .card1-livros:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  }
+  
+  .card1-livros-child {
+    display: none;
+  }
+  
+  .div1 {
+    position: absolute;
+    top: 30px;
+    left: 46px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #d0af56;
+    font-family: Poppins, sans-serif;
+  }
+  
+  .telephone-parent {
+    position: absolute;
+    top: 14px;
+    left: 112px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 120px;
+  }
+  
+  .telephone {
+    font-size: 12px;
+    font-weight: 600;
+    color: #d0af56;
+    font-family: Poppins, sans-serif;
+    min-width: 100px;
+    text-align: left;
+  }
+  
+  .parent {
+    position: absolute;
+    top: 40px;
+    left: 112px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 120px;
+    font-size: 14px;
+    color: #000;
+    font-family: Poppins, sans-serif;
+  }
+  
+  .nktt-sukuk {
+    font-weight: 500;
+    min-width: 100px;
+    max-width: 100px;
+    white-space: nowrap;
+    overflow: visible;
+    text-overflow: ellipsis; 
+    text-align: left;
+  }
+  
+  .icon-edit {
+    position: absolute;
+    top: 30px;
+    right: 40px;
+    font-size: 16px;
+    cursor: pointer;
+    color: #555;
+  }
+  
+  .icon-delete {
+    position: absolute;
+    top: 30px;
+    right: 70px;
+    font-size: 16px;
+    cursor: pointer;
+    color: #555;
+  }
+  
+  /* Modal styles */
+  .modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding-top: 20px;
+    z-index: 1000;
+    padding-bottom: 20px;
+  }
+  
+  .modal-content {
+    background: #fff;
+    border: 1px solid #d3d3d3;
+    border-radius: 20px;
+    width: 600px;
+    max-width: 90%;
+    padding: 40px;
+    box-sizing: border-box;
+    margin-top: 20px;
+    padding-bottom: 20px;
+  }
+  
+  .modal-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+    position: relative;
+  }
+  
+  .modal-header h2 {
+    font-size: 18px;
+    font-weight: 500;
+    color: #333;
+    margin: 0;
+    font-family: Poppins, sans-serif;
+    text-align: center;
+  }
+  
+  .close-button {
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+    color: #d0af56;
+    position: absolute;
+    right: 0;
+  }
+  
+  .form-group {
+    margin-bottom: 20px;
+  }
+  
+  .form-group label {
+    display: block;
+    font-size: 14px;
+    font-weight: 500;
+    color: #333;
+    margin-bottom: 5px;
+    font-family: Poppins, sans-serif;
+    padding-bottom: 2px;
+  }
+  
+  .form-group input {
+    width: 100%;
+    padding: 6px 0;
+    border: none;
+    border-bottom: 1px solid #d0af56;
+    font-size: 14px;
+    font-family: Poppins, sans-serif;
+    outline: none;
+  }
+  
+  .form-group input:focus {
+    border-bottom: 1px solid #d0af56;
+  }
+  
+  .form-group select {
+    width: 100%;
+    padding: 6px 0;
+    border: none;
+    border-bottom: 1px solid #d0af56;
+    font-size: 14px;
+    font-family: Poppins, sans-serif;
+    outline: none;
+    background-color: transparent;
+    color: #333;
+  }
+  
+  .form-group select:focus {
+    border-bottom: 1px solid #d0af56;
+  }
+  
+  .form-group select option {
+    font-size: 14px;
+    font-family: Poppins, sans-serif;
+    color: #333;
+  }
+  
+  .modal-footer {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+  }
+  
+  .save-button {
+    background-color: #d0af56;
+    border: none;
+    color: #fff;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    font-family: Poppins, sans-serif;
+  }
+  
+  .save-button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+  
+  /* Status badge styles */
+  .status-badge {
+    padding: 5px 10px;
+    border-radius: 12px;
+    color: white;
+    font-weight: bold;
+    font-size: 12px;
+    font-family: Poppins;
+  }
+  
+  .badge-en-cours {
+    background-color: rgb(241, 194, 99)
+  }
+  
+  .badge-termine {
+    background-color: #4edd52;
+  }
+  
+  .badge-planifie {
+    background-color:#979797E5;
+  }
+  
+  /* Kanban Board Styles */
+  .kanban-board {
+    display: flex;
+    gap: 20px;
+    padding: 0;
+    height: 100%;
+    margin-top: -15px;
+    position: relative;
+    z-index: 2;
+  }
+  
+  .kanban-column {
+    flex: 1;
+    min-width: 300px;
+    background-color: #F1F3F5;
+    border-radius: 10px 10px 10px 10px;
+    display: flex;
+    flex-direction: column;
+    max-height: calc(100vh - 200px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Column Headers */
+  .column-header {
+    padding: 8px 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 10px 10px 0 0;
+    position: relative;
+    z-index: 3;
+    margin-top: 5px;
+  }
+  
+  /* À Faire Column */
+  .kanban-column:nth-child(1) .column-header {
+    background-color: #FFE4E4;
+    border-bottom: 2px solid #FF6B6B;
+  }
+  
+  .kanban-column:nth-child(1) .column-title {
+    color: #FF6B6B;
+  }
+  
+  /* En Cours Column */
+  .kanban-column:nth-child(2) .column-header {
+    background-color: #E4F1FF;
+    border-bottom: 2px solid #4DABF7;
+  }
+  
+  .kanban-column:nth-child(2) .column-title {
+    color: #4DABF7;
+  }
+  
+  /* Terminé Column */
+  .kanban-column:nth-child(3) .column-header {
+    background-color: #E4FFE4;
+    border-bottom: 2px solid #51CF66;
+  }
+  
+  .kanban-column:nth-child(3) .column-title {
+    color: #51CF66;
+  }
+  
+  /* Column Content Areas */
+  .kanban-column:nth-child(1) .column-content {
+    background-color: #FFF5F5;
+  }
+  
+  .kanban-column:nth-child(2) .column-content {
+    background-color: #F5F9FF;
+  }
+  
+  .kanban-column:nth-child(3) .column-content {
+    background-color: #F5FFF5;
+  }
+  
+  .column-title-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  
+  .column-icon {
+    font-size: 16px;
+  }
+  
+  .column-title {
+    font-size: 14px;
+    font-weight: 600;
+    font-family: Poppins, sans-serif;
+  }
+  
+  .column-count {
+    background-color: rgba(0, 0, 0, 0.1);
+    padding: 2px 6px;
+    border-radius: 10px;
+    font-size: 11px;
+    color: #666;
+    font-family: Poppins, sans-serif;
+  }
+  
+  .column-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 15px;
+    background-color: #F1F3F5;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .task-content {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .task-description {
+    font-size: 14px;
+    color: #333;
+    font-family: Poppins, sans-serif;
+    font-weight: 500;
+    margin-bottom: 5px;
+  }
+  
+  .task-details {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .task-detail {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: #666;
+    font-family: Poppins, sans-serif;
+  }
+  
+  .task-detail i {
+    color: #d0af56;
+    width: 16px;
+    text-align: center;
+  }
+  
+  .task-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+    margin-top: 10px;
+  }
+  
+  .task-actions i {
+    color: #666;
+    cursor: pointer;
+    transition: color 0.2s ease;
+  }
+  
+  .task-actions i:hover {
+    color: #d0af56;
+  }
+  
+  /* Drag and Drop Styles */
+  .cdk-drag-preview {
+    box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
+                0 3px 1px 1px rgba(0, 0, 0, 0.14),
+                0 3px 1px 2px rgba(0, 0, 0, 0.12);
+  }
+  
+  .cdk-drag-placeholder {
+    opacity: 0.3;
+  }
+  
+  .cdk-drag-animating {
+    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+  }
+  
+  .kanban-column.cdk-drop-list-dragging .frame-wrapper:not(.cdk-drag-placeholder) {
+    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+  }
+  
+  /* Remove status badge styles */
+  .status-badge,
+  .badge-en-cours,
+  .badge-termine,
+  .badge-planifie {
+    display: none;
+  }
+  
+  /* Column Icons */
+  .kanban-column:nth-child(1) .column-icon {
+    color: #FF6B6B;
+  }
+  
+  .kanban-column:nth-child(2) .column-icon {
+    color: #4DABF7;
+  }
+  
+  .kanban-column:nth-child(3) .column-icon {
+    color: #51CF66;
+  }
+  
+  /* Task Detail Icons */
+  .kanban-column:nth-child(1) .task-detail i {
+    color: #FF6B6B;
+  }
+  
+  .kanban-column:nth-child(2) .task-detail i {
+    color: #4DABF7;
+  }
+  
+  .kanban-column:nth-child(3) .task-detail i {
+    color: #51CF66;
+  }
+  
+  /* Task Action Icons */
+  .kanban-column:nth-child(1) .task-actions i {
+    color: #FF6B6B;
+  }
+  
+  .kanban-column:nth-child(2) .task-actions i {
+    color: #4DABF7;
+  }
+  
+  .kanban-column:nth-child(3) .task-actions i {
+    color: #51CF66;
+  }
+  
+  /* Hover effects for icons */
+  .kanban-column:nth-child(1) .task-actions i:hover {
+    color: #ff3b3b;
+  }
+  
+  .kanban-column:nth-child(2) .task-actions i:hover {
+    color: #339af0;
+  }
+  
+  .kanban-column:nth-child(3) .task-actions i:hover {
+    color: #40c057;
+  }

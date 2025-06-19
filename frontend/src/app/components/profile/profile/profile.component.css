@@ -1,0 +1,188 @@
+.profile-container {
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 25px 25px;
+  width: 100%;
+  height: calc(100% - 100px);
+  overflow-y: auto;
+  box-sizing: border-box;
+}
+
+.profile-card {
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.25);
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  border: 1px solid #d3d3d3;
+  overflow: hidden;
+}
+
+.profile-header {
+  border-radius: 10px 10px 0 0;
+  background-color: #F1F3F5;
+  padding: 20px;
+  box-sizing: border-box;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.profile-header h2 {
+  font-size: 24px;
+  line-height: 28px;
+  font-weight: 500;
+  color: #000;
+  font-family: Poppins, sans-serif;
+  margin: 0;
+}
+
+.profile-content {
+  padding: 20px;
+}
+
+.avatar-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.avatar-container {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 4px solid #d0af56;
+  margin-bottom: 1rem;
+}
+
+.profile-avatar {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.user-name {
+  margin: 0;
+  font-family: Poppins, sans-serif;
+  font-size: 22px;
+  font-weight: 600;
+  color: #333;
+}
+
+.user-role {
+  font-family: Poppins, sans-serif;
+  font-size: 14px;
+  color: #d0af56;
+  margin-top: 0.5rem;
+  background-color: rgba(208, 175, 86, 0.1);
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+}
+
+.user-info-section {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.info-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 15px;
+  background-color: #f8f9fa;
+  border-radius: 6px;
+  border-left: 3px solid #d0af56;
+}
+
+.info-label {
+  font-family: Poppins, sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: #666;
+}
+
+.info-value {
+  font-family: Inter, sans-serif;
+  font-size: 14px;
+  color: #333;
+}
+
+.profile-actions {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.action-button {
+  padding: 10px 15px;
+  border-radius: 8px;
+  background-color: #f8f9fa;
+  border: 1px solid #eee;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+  color: #333;
+  font-size: 14px;
+  font-weight: 500;
+  font-family: Poppins, sans-serif;
+}
+
+.action-button:hover {
+  background-color: #f1f3f5;
+  transform: translateY(-2px);
+}
+
+.action-button i {
+  color: #d0af56;
+  font-size: 16px;
+}
+
+.loading-spinner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 20px;
+  color: #666;
+  font-family: Inter, sans-serif;
+}
+
+.error-message {
+  background-color: #fff0f0;
+  border-left: 3px solid #d32f2f;
+  color: #d32f2f;
+  padding: 10px 15px;
+  border-radius: 4px;
+  font-family: Inter, sans-serif;
+  margin: 10px 0;
+}
+
+/* Custom scrollbar styling */
+.profile-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.profile-container::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.profile-container::-webkit-scrollbar-thumb {
+  background: #d0af56;
+  border-radius: 4px;
+}
+
+.profile-container::-webkit-scrollbar-thumb:hover {
+  background: #b89a4a;
+}
+
+/* For Firefox */
+.profile-container {
+  scrollbar-width: thin;
+  scrollbar-color: #d0af56 #f1f1f1;
+}

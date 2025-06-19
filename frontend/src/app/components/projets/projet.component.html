@@ -1,0 +1,241 @@
+<div class="projet-container">
+  <!-- Add notification component at the top of the template -->
+  <app-notification></app-notification>
+  
+  <!-- Gray header area -->
+  <div class="projet-header">
+    <div class="header-top">
+      <div class="liste-des-projets">Liste des projets</div>
+      <div class="header-actions">
+        <div class="search">
+          <img class="search-s-icon" alt="Search Icon" src="/assets/images/Search-s.svg" />
+          <input
+            type="text"
+            class="text"
+            placeholder="Search"
+            [(ngModel)]="searchQuery"
+            (input)="onSearch()"
+          />
+          <div class="shortcut">
+            <div class="c">⌘/</div>
+          </div>
+        </div>
+        <!-- Add category filter dropdown -->
+        <div class="category-filter">
+          <select [(ngModel)]="selectedCategory" (change)="onCategoryFilterChange()">
+            <option value="">Toutes les catégories</option>
+            <option *ngFor="let cat of categoryList" [value]="cat">{{ cat }}</option>
+          </select>
+        </div>
+        <button *ngIf="canManageProjects()" class="button-cadastrarlivro" (click)="openModal()">
+          <div class="button-cadastrarlivro-child"></div>
+          <span class="div">+</span>
+          <b class="ajouter-un-projet">créer un projet</b>
+        </button>
+      </div>
+    </div>
+    <div class="header-bottom">
+      <div class="frame-child">
+        <div class="projets-existants">{{ filteredProjets.length }} projets existants</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main content (table and modal) -->
+  <div class="projets-content">
+    <div class="frame-group">
+      <!-- No results message -->
+      <div class="no-results-message" *ngIf="filteredProjets.length === 0">
+        <div class="empty-state">
+          <i class="fas fa-search-minus"></i>
+          <h3>Aucun projet trouvé</h3>
+          <p>Aucun projet ne correspond à votre recherche ou au filtre de catégorie sélectionné.</p>
+          <button class="reset-button" (click)="resetFilters()">Réinitialiser les filtres</button>
+        </div>
+      </div>
+
+      <div class="frame-wrapper" *ngFor="let projet of paginatedProjets; let i = index">
+        <div class="card1-livros">
+          <div class="card1-livros-child"></div>
+          <div class="div1">{{ (currentPage - 1) * itemsPerPage + i + 1 }}</div>
+          
+          <div class="telephone-parent">
+            <div class="telephone"  >Nom</div>
+            <div class="telephone">Budget</div>
+            <div class="telephone">Date de debut</div>
+            <div class="telephone">Date de fin</div>
+            <div class="telephone">Status</div>
+            <div class="telephone">Catégorie</div>
+
+          </div>
+          <div class="parent">
+            <div class="nktt-sukuk" [title]="projet.nom">{{ projet.nom }}</div>
+            <div class="nktt-sukuk" [title]="projet.budget ? projet.budget + ' MRU' : 'N/A'">
+              {{ projet.budget ? projet.budget + ' MRU' : 'N/A' }}
+            </div>
+            <div class="nktt-sukuk">{{ projet.dateDebut }}</div>
+            <div class="nktt-sukuk">{{ projet.dateFin || 'N/A' }}</div>
+            <div class="nktt-sukuk">
+              <span
+                class="status-badge"
+                [ngClass]="{
+                  'badge-en-cours': projet.status === 'EN_COURS',
+                  'badge-termine': projet.status === 'TERMINE',
+                  'badge-planifie': projet.status === 'PLANIFIE',
+                  'badge-retarde': projet.status === 'RETARDE',
+                  'badge-bloque': projet.status === 'BLOQUE'
+                }"
+              >
+                {{ projet.status }}
+              </span>
+            </div>
+            <div class="nktt-sukuk" [title]="projet.category">
+              <span
+                class="category-badge"
+                [ngClass]="{
+                  'badge-medical': projet.category === Category.MEDICAL,
+                  'badge-software': projet.category === Category.SOFTWARE,
+                  'badge-residentiel': projet.category === Category.RESIDENTIEL,
+                  'badge-commercial': projet.category === Category.COMMERCIAL,
+                  'badge-institutionnel': projet.category === Category.INSTITUTIONNEL,
+                  'badge-autre': projet.category === Category.AUTRE
+                }"
+              >
+                {{ projet.category }}
+              </span>
+            </div>
+          </div>          <div class="actions-wrapper">
+            <div class="actions-column left-column">
+              <div class="action-item">
+                <img *ngIf="canManageProjects()" class="icon-edit" alt="Edit Icon" src="/assets/images/icon-edit.svg" (click)="openModal(projet)" title="modifier" />
+              </div>
+              <div class="action-item">
+                <i *ngIf="canManageProjects()" class="fas fa-archive icon-archive" (click)="archiveProjet(projet.id)" title="Archiver"></i>
+              </div>
+            </div>
+            <div class="actions-column middle-column">
+              <div *ngIf="!canManageProjects()"  class="action-label">Documents</div>
+              <div class="action-item">
+                <i class="fas fa-file-alt icon-documents" (click)="viewDocuments(projet.id)" title="Documents"></i>
+              </div>
+              <div class="action-item">
+                <i *ngIf="canManageProjects()" class="fas fa-users icon-users" (click)="navigateToUsers(projet.id)" title="Users"></i>
+              </div>
+            </div>
+            <div class="actions-column right-column details-column">
+              <div class="action-label">Détails</div>
+              <div class="action-item">
+                <i class="fas fa-clipboard-list icon-compte-rendu" (click)="navigateToCompteRendu(projet.id)" title="Comptes Rendus"></i>
+                
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pagination Controls -->
+    <div class="pagination-controls" *ngIf="totalPages > 1">
+      <button class="pagination-button" (click)="previousPage()" [disabled]="currentPage === 1">
+        <i class="fas fa-chevron-left"></i>
+      </button>
+      
+      <div class="page-numbers">
+        <button 
+          *ngFor="let page of [].constructor(totalPages); let i = index" 
+          class="page-number" 
+          [class.active]="currentPage === i + 1"
+          (click)="goToPage(i + 1)"
+        >
+          {{ i + 1 }}
+        </button>
+      </div>
+      
+      <button class="pagination-button" (click)="nextPage()" [disabled]="currentPage === totalPages">
+        <i class="fas fa-chevron-right"></i>
+      </button>
+    </div>
+
+    <div class="pagination-info" *ngIf="totalPages > 1">
+      Page {{ currentPage }} of {{ totalPages }} - Showing {{ paginatedProjets.length }} of {{ filteredProjets.length }} projects
+    </div>
+
+    <!-- Modal -->
+    <div class="modal" *ngIf="showModal" #modal (click)="onModalClick($event)">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>{{ editingProjet ? 'modifier Projet' : 'créer un projet' }}</h2>
+          <button class="close-button" (click)="closeModal()">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <form [formGroup]="projetForm" (ngSubmit)="onSubmit()">
+          <div class="form-group">
+            <label for="nom">Nom</label>
+            <input type="text" id="nom" formControlName="nom" required />
+          </div>
+          <div class="form-group">
+            <label for="dateDebut">Date Début</label>
+            <input type="date" id="dateDebut" formControlName="dateDebut" />
+          </div>
+          <div class="form-group">
+            <label for="dateFin">Date Fin</label>
+            <input type="date" id="dateFin" formControlName="dateFin" />
+          </div>
+          <div class="form-group">
+            <label for="budget">Budget</label>
+            <input type="number" id="budget" formControlName="budget" />
+          </div>
+          <!-- <div class="form-group">
+            <label for="status">Status</label>
+            <select id="status" formControlName="status">
+              <option *ngFor="let status of ['PLANIFIE','EN_COURS', 'RETARDE', 'BLOQUE','TERMINE']" [value]="status">
+                {{ status }}
+              </option>
+            </select>
+          </div> -->
+          <!-- Add Category field -->
+          <div class="form-group">
+            <label for="category">Catégorie</label>
+            <select id="category" formControlName="category">
+              <option *ngFor="let cat of categoryList" [value]="cat">{{ cat }}</option>
+            </select>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="submit"
+              class="save-button"
+              [disabled]="!projetForm.valid || isLoading"
+            >
+              {{ isLoading ? 'Saving...' : 'Enregistrer' }}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Archive Confirmation Modal -->
+    <div class="modal archive-modal" *ngIf="showArchiveConfirm">
+      <div class="modal-content archive-modal-content">
+        <div class="modal-header">
+          <h2>Confirmation d'archivage</h2>
+          <button class="close-button" (click)="cancelArchive()">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <div class="archive-message">
+          <i class="fas fa-archive archive-icon"></i>
+          <p>Êtes-vous sûr de vouloir archiver ce projet ?</p>
+          <p class="archive-warning">Cette action ne peut pas être annulée.</p>
+        </div>
+        <div class="archive-actions">
+          
+          <button class="confirm-button" [disabled]="isLoading" (click)="confirmArchive()">
+            {{ isLoading ? 'Archivage...' : 'Archiver' }}
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

@@ -1,0 +1,302 @@
+:host {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: auto;
+  width: auto;
+  background-color: white;
+  padding: 50px;
+  
+}
+
+.sign-in {
+  border-radius: 12px;
+  background-color: #fff;
+  overflow: hidden;
+  width: 100%;
+  max-width: 900px;
+  box-shadow: 20px 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.layout {
+  gap: 15px;
+  display: flex;
+}
+
+/* Image Column Styles */
+.image-column {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  line-height: normal;
+  width: 45%;
+}
+
+.hero-image {
+  aspect-ratio: 0.67;
+  object-fit: cover;
+  object-position: center;
+  width: 100%;
+  flex-grow: 1;
+  max-height: 600px;
+}
+
+/* Content Column Styles */
+.content-column {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  line-height: normal;
+  width: 55%;
+  margin-left: 15px;
+  padding: 30px 20px;
+}
+
+.content-wrapper {
+  display: flex;
+  flex-grow: 1;
+  padding: 20px 30px;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: center;
+}
+
+.content-container {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Header Styles */
+.header {
+  align-self: flex-start;
+  color: #040308;
+  width: 100%;
+  max-width: 350px;
+}
+
+.title {
+  font-size: 24px;
+  font-family: Poppins;
+  font-weight: 700;
+  margin: 0;
+  position: center;
+}
+
+.signup-text {
+  font-size: 14px;
+  font-family: Poppins, Roboto, Helvetica, sans-serif;
+  font-weight: 400;
+  margin-top: 8px;
+}
+
+.signup-text span {
+  margin-right: 5px;
+}
+
+.signup-link {
+  font-family: Poppins, -apple-system, Roboto, Helvetica, sans-serif;
+  font-weight: 700;
+  color: #d0af56;
+  cursor: pointer;
+}
+
+/* Form Styles */
+.form-container {
+  margin-top: 50px;
+  width: 100%;
+  max-width: 350px;
+}
+
+.auth-form {
+  width: 100%;
+  font-family: Poppins, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 14px;
+}
+
+.form-fields {
+  width: 100%;
+  color: #040308;
+  font-weight: 400;
+}
+
+.email-input {
+  border-radius: 5px;
+  border: 1px solid rgba(4, 3, 8, 0.6);
+  width: 100%;
+  padding: 12px 15px;
+  font-family: inherit;
+  font-size: inherit;
+}
+
+.password-field {
+  border-radius: 5px;
+  border: 1px solid rgba(4, 3, 8, 0.6);
+  display: flex;
+  margin-top: 25px;
+  width: 100%;
+  padding: 12px 15px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+}
+
+.password-input {
+  border: none;
+  outline: none;
+  width: 100%;
+  font-family: inherit;
+  font-size: inherit;
+  background: transparent;
+}
+
+.toggle-password-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  color: rgba(4, 3, 8, 0.5);
+}
+
+.toggle-icon {
+  display: block;
+}
+
+.forgot-password {
+  background: none;
+  border: none;
+  padding: 0;
+  margin-top: 20px;
+  width: 100%;
+  text-align: right;
+  font-size: 12px;
+  color: #d0af56;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.submit-button {
+  width: 100%;
+  border-radius: 5px;
+  background-color: #d0af56;
+  border: none;
+  margin-top: 35px;
+  padding: 12px 15px;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: inherit;
+}
+
+
+
+
+.submit-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background-color: #cccccc;
+}
+
+.email-input.error,
+.password-field.error {
+  border-color: #F64E60;
+}
+
+.error-message {
+  color: #F64E60;
+  font-size: 12px;
+  font-family: inherit;
+  margin-top: 10px;
+  text-align: center;
+}
+
+/* Responsive Styles */
+@media (max-width: 1366px) {
+  .sign-in {
+    max-width: 800px;
+  }
+
+  .content-wrapper {
+    padding: 30px 25px;
+  }
+
+  .hero-image {
+    max-height: 500px;
+  }
+}
+
+@media (max-width: 991px) {
+  :host {
+    padding: 0;
+  }
+  
+  .sign-in {
+    max-width: 100%;
+    box-shadow: none;
+    border-radius: 0;
+  }
+
+  .layout {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+  }
+
+  .image-column {
+    width: 100%;
+  }
+
+  .hero-image {
+    max-height: 300px;
+  }
+
+  .content-column {
+    width: 100%;
+    margin-left: 0;
+    padding: 20px 15px;
+  }
+
+  .content-wrapper {
+    padding: 15px;
+  }
+
+  .form-container {
+    margin-top: 30px;
+    max-width: 100%;
+  }
+
+  .form-fields,
+  .email-input,
+  .password-field,
+  .forgot-password,
+  .submit-button {
+    max-width: 100%;
+  }
+}
+
+.loading-spinner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.loading-spinner i {
+  font-size: 16px;
+}
+
+/* Remove all hero-image-fallback related styles */
+.hero-image-fallback,
+.fallback-content,
+.fallback-content i,
+.fallback-content h2,
+.fallback-content p {
+  display: none;
+}

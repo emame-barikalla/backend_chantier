@@ -1,0 +1,54 @@
+<div class="profile-container">
+  <div class="profile-card">
+    <div class="profile-header">
+      <h2>Mon Profil</h2>
+    </div>
+
+    <div *ngIf="isLoading" class="loading-spinner">
+      <i class="fas fa-spinner fa-spin"></i> Chargement...
+    </div>
+
+    <div *ngIf="error" class="error-message">
+      {{ error }}
+    </div>
+
+    <div *ngIf="user && !isLoading" class="profile-content">
+      <div class="avatar-section">
+        <div class="avatar-container">
+          <img src="assets/images/avatar.png" alt="User Avatar" class="profile-avatar">
+        </div>
+        <h3 class="user-name">{{ user.nom }} {{ user.prenom }}</h3>
+        <span class="user-role">{{ user.roles[0].name | titlecase }}</span>
+      </div>
+
+      <div class="user-info-section">
+        <div class="info-group">
+          <div class="info-label">Email</div>
+          <div class="info-value">{{ user.email }}</div>
+        </div>
+
+        <div class="info-group">
+          <div class="info-label">Nom complet</div>
+          <div class="info-value">{{ user.nom }} {{ user.prenom }}</div>
+        </div>
+
+        <div class="info-group">
+          <div class="info-label">Téléphone</div>
+          <div class="info-value">{{ user.telephone || 'Non spécifié' }}</div>
+        </div>
+         <div class="info-group">
+          <div class="info-label">Adresse</div>
+          <div class="info-value">{{ user.adresse || 'Non spécifié' }}</div>
+        </div>
+
+        
+      </div>
+
+      <div class="profile-actions">
+        <button class="action-button password-button" (click)="navigateToChangePassword()">
+          <i class="fas fa-key"></i> Changer le mot de passe
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

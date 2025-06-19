@@ -1,0 +1,121 @@
+<div class="users-container">
+  <!-- Header section -->
+  <div class="users-header">
+    <div class="header-top">
+      <div class="header-title">
+        <a [routerLink]="['/projets']" class="back-button">
+          <i class="fas fa-arrow-left"></i>
+        </a>
+        <span class="liste-des-projets">Utilisateurs du projet</span>
+      </div>
+      <!-- Add user button in header -->
+      <button class="add-user-button" (click)="toggleAddUserForm()">
+        <i class="fas fa-user-plus"></i> Ajouter un utilisateur
+      </button>
+    </div>
+  </div>
+
+  <!-- Main content -->
+  <div class="users-content">
+    <!-- User Assignment Form - hidden by default -->
+    <div class="assignment-card" *ngIf="showAddUserForm">
+      <div class="card-header-flex">
+        <h4 class="section-title">Ajouter un utilisateur</h4>
+        <button class="close-form-button" (click)="toggleAddUserForm()">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <form [formGroup]="assignmentForm" (ngSubmit)="onSubmit()">
+        <div class="form-row">
+          <div class="form-group half-width">
+            <label for="roleType">Rôle</label>
+            <select id="roleType" formControlName="roleType" (change)="onRoleTypeChange()">
+              <option value="">Sélectionner un rôle</option>
+              <option value="ROLE_ENTREPRISE">Entreprise</option>
+              <option value="ROLE_BUREAU_ETUDE">Bureau d'étude</option>
+              <option value="ROLE_MAITRE_OUVRAGE">Maître d'ouvrage</option>
+              <option value="ROLE_MAITRE_OEUVRE">Maître d'œuvre</option>
+              <option value="ROLE_CONTROLEUR_TECHNIQUE">Contrôleur technique</option>
+              <option value="ROLE_SOUS_TRAITANT">Sous-traitant</option>
+            </select>
+          </div>
+          <div class="form-group half-width">
+            <label for="user">Utilisateur</label>
+            <select id="user" formControlName="userId" >
+              <option value="">Sélectionner un utilisateur</option>
+              <option *ngFor="let user of filteredUsers" [value]="user.id">
+                {{user.nom}} {{user.prenom}}
+              </option>
+            </select>
+          </div>
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="save-button" [disabled]="!assignmentForm.valid">
+            <i class="fas fa-user-plus"></i> Assigner
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Current Project Users List -->
+    <div class="users-list-card">
+      <h4 class="section-title">Utilisateurs du projet</h4>
+      
+      <!-- Empty state message outside the table -->
+      <div *ngIf="projectUsers.length === 0" class="empty-state-container">
+        <div class="empty-state">
+          <i class="fas fa-users"></i>
+          <h3>Aucun utilisateur assigné</h3>
+          <p>Utilisez le bouton "Ajouter un utilisateur" pour assigner des utilisateurs à ce projet</p>
+        </div>
+      </div>
+      
+      <!-- Only show table if there are users -->
+      <div class="table-container" *ngIf="projectUsers.length > 0">
+        <table class="users-table">
+          <thead>
+            <tr>
+              <th>Nom</th>
+              <th>Email</th>
+              <th>Rôle</th>
+              <th>Statut</th>
+              <th class="action-column">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let user of projectUsers">
+              <td>{{user.userNom}} {{user.userPrenom}}</td>
+              <td>{{user.userEmail}}</td>
+              <td>
+                <span class="role-badge" [ngClass]="getRoleBadgeClass(user.role)">
+                  {{user.role | roleLabel}}
+                </span>
+              </td>
+              <td>
+                <span class="status-badge" [ngClass]="user.isActive ? 'badge-termine' : 'badge-retarde'">
+                  {{user.isActive ? 'Actif' : 'Inactif'}}
+                </span>
+              </td>
+              <td class="actions-cell">
+                <div class="actions-container">
+                  <button class="action-button remove-button" 
+                          (click)="removeUser(user)"
+                          *ngIf="user.isActive"
+                          title="Retirer l'utilisateur">
+                    <i class="fas fa-user-minus"></i>
+                  </button>
+                  <button class="action-button activate-button" 
+                          (click)="activateUser(user)"
+                          *ngIf="!user.isActive"
+                          title="Activer l'utilisateur">
+                    <i class="fas fa-user-check"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
