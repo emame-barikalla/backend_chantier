@@ -19,7 +19,9 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/admin/users")
-@PreAuthorize("hasAuthority('ROLE_ADMIN')")
+//@PreAuthorize("hasAuthority('ROLE_ADMIN')")
+@PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_MAITRE_OUVRAGE','ROLE_MAITRE_OEUVRE')")
+
 public class UserController {
 
     private final UserService userService;
@@ -67,7 +69,25 @@ public class UserController {
     @GetMapping("/bureauxSuivi")
     public ResponseEntity<List<User>> getBureauxSuivi() {
         return ResponseEntity.ok(userService.getUsersByRole(ERole.ROLE_BUREAU_ETUDE));
+
     }
+
+    // New endpoint to get users with the role of "Maitre Oeuvre"
+@GetMapping("/maitreOeuvres")
+    public ResponseEntity<List<User>> getMaitreOeuvres() {
+        return ResponseEntity.ok(userService.getUsersByRole(ERole.ROLE_MAITRE_OEUVRE));
+    }
+// endpoint to get users with the role of "Sous Traitants"
+    @GetMapping("/sousTraitants")
+    public ResponseEntity<List<User>> getSousTraitants() {
+        return ResponseEntity.ok(userService.getUsersByRole(ERole.ROLE_SOUS_TRAITANT));
+    }
+// endpoint to get users with the role of "Controleur Technique"
+    @GetMapping("/controlleurs")
+    public ResponseEntity<List<User>> getControlleurs() {
+        return ResponseEntity.ok(userService.getUsersByRole(ERole.ROLE_CONTROLEUR_TECHNIQUE));
+    }
+
 
     private UserResponseDTO convertToResponseDTO(User user) {
         UserResponseDTO dto = new UserResponseDTO();
@@ -75,6 +95,7 @@ public class UserController {
         dto.setNom(user.getNom());
         dto.setPrenom(user.getPrenom());
         dto.setEmail(user.getEmail());
+        dto.setAdresse(user.getAdresse());
         dto.setTelephone(user.getTelephone());
         dto.setRoles(user.getRoles().stream()
                 .map(role -> {

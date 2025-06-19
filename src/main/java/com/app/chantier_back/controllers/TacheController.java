@@ -25,6 +25,7 @@ public class TacheController {
         return new ResponseEntity<>(taches, HttpStatus.OK);
     }
 
+
     @GetMapping("/{id}")
     public ResponseEntity<TacheDTO> getTacheById(@PathVariable Long id) {
         TacheDTO tache = tacheService.getTacheById(id);
@@ -61,5 +62,6 @@ public class TacheController {
         tacheService.deleteTache(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
 }
 

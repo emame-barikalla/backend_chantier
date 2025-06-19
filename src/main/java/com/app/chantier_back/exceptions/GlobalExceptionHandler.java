@@ -27,4 +27,9 @@ public class GlobalExceptionHandler {
         });
         return ResponseEntity.badRequest().body(errors);
     }
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<String> handleAccessDenied(AccessDeniedException ex) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ex.getMessage());
+    }
+
 }

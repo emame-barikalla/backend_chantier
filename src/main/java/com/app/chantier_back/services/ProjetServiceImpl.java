@@ -1,11 +1,16 @@
 package com.app.chantier_back.services;
 
 import com.app.chantier_back.dto.ProjetDTO;
+import com.app.chantier_back.dto.ProjetUserDTO;
 import com.app.chantier_back.entities.Projet;
+import com.app.chantier_back.entities.ProjetUser;
 import com.app.chantier_back.entities.enumeration.Category;
 import com.app.chantier_back.entities.enumeration.StatusProjet;
 import com.app.chantier_back.exceptions.ResourceNotFoundException;
 import com.app.chantier_back.repositories.ProjetRepository;
+import com.app.chantier_back.repositories.ProjetUserRepository;
+import com.app.chantier_back.repositories.UserRepository;
+import com.app.chantier_back.services.interfaces.NotificationService;
 import com.app.chantier_back.services.interfaces.ProjetService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,13 +22,19 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ProjetServiceImpl implements ProjetService {
     private final ProjetRepository projetRepository;
+    private final UserRepository userRepository;
+    private final NotificationService notificationService;
+    private final ProjetUserRepository projetUserRepository;
 
     // Récupérer tous les projets except les archivés
     @Override
     public List<ProjetDTO> getAllProjets() {
+
         return projetRepository.findByIsArchived(false).stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
+
+
 
     }
 
@@ -40,6 +51,8 @@ public class ProjetServiceImpl implements ProjetService {
         Projet project = convertToEntity(projetDTO);
         project.setStatus(StatusProjet.PLANIFIE);
         Projet savedProject = projetRepository.save(project);
+
+
         return convertToDTO(savedProject);
     }
 
@@ -57,6 +70,26 @@ public class ProjetServiceImpl implements ProjetService {
 
 
         Projet updatedProject = projetRepository.save(existingProject);
+
+
+        // Fetch active users assigned to the project
+        List<Long> userIds = projetUserRepository.findByProjetId(id)
+                .stream()
+                .filter(ProjetUser::isActive) // Only active users
+                .map(projetUser -> projetUser.getUser().getId()) // Extract user IDs
+                .collect(Collectors.toList());
+
+        // Validate user IDs before sending notifications
+//        if (userIds.isEmpty()) {
+//            throw new ResourceNotFoundException("No users assigned to project with id: " + id);
+//        }
+
+
+        // Notify users about the project update only if there are active users
+        if (!userIds.isEmpty()) {
+            notificationService.sendProjectNotification(updatedProject, "modifiée", userIds);
+        }
+
         return convertToDTO(updatedProject);
     }
 

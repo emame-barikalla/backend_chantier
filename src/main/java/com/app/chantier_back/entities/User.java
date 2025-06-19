@@ -48,6 +48,17 @@ public class User implements UserDetails {
     private Set<Role> roles = new HashSet<>();
 
 
+
+    // Add the many-to-many relationship with Projet
+    @ManyToMany
+    @JsonIgnore
+    @JoinTable(
+            name = "user_projects",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "projet_id")
+    )
+    private Set<Projet> projets = new HashSet<>();
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Set<GrantedAuthority> authorities = new HashSet<>();

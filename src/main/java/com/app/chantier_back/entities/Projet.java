@@ -2,6 +2,8 @@ package com.app.chantier_back.entities;
 
 import com.app.chantier_back.entities.enumeration.Category;
 import com.app.chantier_back.entities.enumeration.StatusProjet;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -37,9 +39,13 @@ public class Projet {
 
     @Enumerated(EnumType.STRING)
     private StatusProjet status;
+    @JsonIgnore
     @OneToMany(mappedBy = "projet", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Tache> taches = new ArrayList<>();
 
+    private List<Tache> taches = new ArrayList<>();
+    @JsonIgnore
     @OneToMany(mappedBy = "projet", cascade = CascadeType.ALL, orphanRemoval = true)
+
     private List<Document> documents = new ArrayList<>();
+
 }

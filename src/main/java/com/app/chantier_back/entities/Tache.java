@@ -33,6 +33,8 @@ public class Tache {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "assignee_id")
     private User assignee;
+
+
 }
 
 

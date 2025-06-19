@@ -14,6 +14,9 @@ import java.time.LocalDate;
         private StatutTache statut;
         private LocalDate date;
         private Long projetId;
+        private String projetNom;
         private Long assigneeId;
+        private String assigneeNom;
+
     }
 

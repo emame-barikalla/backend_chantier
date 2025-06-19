@@ -18,7 +18,10 @@ public class UserDTO {
     private String email;
     @NotBlank
     private String password;
+
+    private String adresse;
     private Set<RoleDTO> roles;
     private Set<TacheDTO> taches;
+
 
 }

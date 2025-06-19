@@ -19,5 +19,9 @@ public interface DocumentService {
     void deleteDocument(Long id);
 
     ResponseEntity<Resource> prepareDocumentForViewing(Long id);
+
+    List<Document> getAllDocuments();
+
+
 }
 

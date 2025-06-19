@@ -36,13 +36,14 @@ public class RoleController {
         return ResponseEntity.ok(roleService.createRole(roleDTO));
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    //@PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/all")
     public ResponseEntity<List<RoleDTO>> getAllRoles() {
         return ResponseEntity.ok(roleService.getAllRoles());
     }
 
     @PreAuthorize("hasRole('ADMIN')")
+
     @GetMapping("{id}")
     public ResponseEntity<Role> getRoleById(@PathVariable Long id) {
         return ResponseEntity.ok(roleService.getRoleById(id));

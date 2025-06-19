@@ -8,6 +8,7 @@ import com.app.chantier_back.exceptions.ResourceNotFoundException;
 import com.app.chantier_back.repositories.ProjetRepository;
 import com.app.chantier_back.repositories.TacheRepository;
 import com.app.chantier_back.repositories.UserRepository;
+import com.app.chantier_back.services.interfaces.NotificationService;
 import com.app.chantier_back.services.interfaces.TacheService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,7 @@ public class TacheServiceImpl implements TacheService {
     private final TacheRepository tacheRepository;
     private final ProjetRepository projetRepository;
     private final UserRepository userRepository;
+    private final NotificationService notificationService;
     // Implement the methods from tacheService interface here
 
     @Override
@@ -36,13 +38,18 @@ public class TacheServiceImpl implements TacheService {
                 .orElseThrow(() -> new ResourceNotFoundException("Task not found with id: " + id));
         return convertToDTO(tache);
     }
+@Override
+public TacheDTO createTache(TacheDTO tacheDTO) {
+    Tache tache = convertToEntity(tacheDTO);
+    Tache savedTache = tacheRepository.save(tache);
 
-    @Override
-    public TacheDTO createTache(TacheDTO tacheDTO) {
-        Tache tache = convertToEntity(tacheDTO);
-        Tache savedTache = tacheRepository.save(tache);
-        return convertToDTO(savedTache);
+    // Send notification if task has an assignee
+    if (savedTache.getAssignee() != null) {
+        notificationService.sendTaskAssignmentNotification(savedTache.getAssignee(), savedTache);
     }
+
+    return convertToDTO(savedTache);
+}
 
     @Override
     public TacheDTO updateTache(Long id, TacheDTO tacheDTO) {
@@ -97,9 +104,11 @@ public class TacheServiceImpl implements TacheService {
 
         if (tache.getProjet() != null) {
             tacheDTO.setProjetId(tache.getProjet().getId());
+            tacheDTO.setProjetNom(tache.getProjet().getNom());
         }
         if (tache.getAssignee() != null) {
             tacheDTO.setAssigneeId(tache.getAssignee().getId());
+            tacheDTO.setAssigneeNom(tache.getAssignee().getNom());
         }
         return tacheDTO;
     }

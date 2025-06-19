@@ -8,6 +8,4 @@ public enum DocumentType {
     ETUDE,
 
 
-
-
 }

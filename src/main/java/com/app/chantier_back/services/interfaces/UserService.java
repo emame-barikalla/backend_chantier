@@ -1,6 +1,7 @@
 package com.app.chantier_back.services.interfaces;
 
 
+import com.app.chantier_back.dto.PasswordChangeDTO;
 import com.app.chantier_back.dto.UserDTO;
 import com.app.chantier_back.entities.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -20,4 +21,11 @@ public interface UserService extends UserDetailsService {
     List<User> getUsersByRole(ERole roleName);
 
     User getUserByEmail(String email);
+
+    // New method for password change
+    void changePassword(String email, PasswordChangeDTO passwordChangeDTO);
+
+    User getCurrentUser();
+
+    boolean isUserInProject(Long userId, Long projectId);
 }
