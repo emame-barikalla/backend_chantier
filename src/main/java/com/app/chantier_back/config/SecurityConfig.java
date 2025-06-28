@@ -68,16 +68,18 @@ public class SecurityConfig {
         configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200","https://chantier-frontend-app-aza8cjhjbmheace6.francecentral-01.azurewebsites.net"));
         // Add other allowed origins as needed
 
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        configuration.setAllowedHeaders(Arrays.asList(
-            "Authorization",
-            "Content-Type",
-            "X-Requested-With",
-            "Accept",
-            "Origin",
-            "Access-Control-Request-Method",
-            "Access-Control-Request-Headers"
-        ));
+//        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+//        configuration.setAllowedHeaders(Arrays.asList(
+//            "Authorization",
+//            "Content-Type",
+//            "X-Requested-With",
+//            "Accept",
+//            "Origin",
+//            "Access-Control-Request-Method",
+//            "Access-Control-Request-Headers"
+//        ));
+        configuration.addAllowedHeader("*");
+        configuration.addAllowedMethod("*");
         configuration.setExposedHeaders(Arrays.asList("Authorization"));
         configuration.setAllowCredentials(true);
         configuration.setMaxAge(3600L);
