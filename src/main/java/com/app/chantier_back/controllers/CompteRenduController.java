@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
@@ -67,11 +68,26 @@ public class CompteRenduController {
     @PreAuthorize("hasRole('ADMIN') or hasRole('MAITRE_OUVRAGE') or hasRole('ENTREPRISE') or hasRole('MAITRE_OEUVRE')")
     public ResponseEntity<Resource> getFile(@PathVariable Long id) throws IOException {
         CompteRenduDTO compteRendu = compteRenduService.getById(id);
-        Path filePath = Paths.get(compteRendu.getFilePath());
-        Resource resource = new UrlResource(filePath.toUri());
 
+        Resource resource;
+        Path filePath = Paths.get(compteRendu.getFilePath());
+
+        if (Files.exists(filePath)) {
+            // Le fichier existe sur disque
+            resource = new UrlResource(filePath.toUri());
+        } else {
+            // Fallback vers le classpath resource
+            String filename = filePath.getFileName().toString();
+            resource = new org.springframework.core.io.ClassPathResource("/static/uploads/compte_rendus/" + filename);
+
+            if (!resource.exists()) {
+                throw new java.io.FileNotFoundException("Fichier introuvable : " + filename);
+            }
+        }
+
+        // Déterminer le Content-Type
         String contentType;
-        if (compteRendu.getFileType().equals("PHOTO")) {
+        if ("PHOTO".equalsIgnoreCase(compteRendu.getFileType())) {
             contentType = "image/jpeg";
         } else {
             contentType = "video/mp4";
@@ -82,6 +98,26 @@ public class CompteRenduController {
                 .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + resource.getFilename() + "\"")
                 .body(resource);
     }
+
+//    @GetMapping("/file/{id}")
+//    @PreAuthorize("hasRole('ADMIN') or hasRole('MAITRE_OUVRAGE') or hasRole('ENTREPRISE') or hasRole('MAITRE_OEUVRE')")
+//    public ResponseEntity<Resource> getFile(@PathVariable Long id) throws IOException {
+//        CompteRenduDTO compteRendu = compteRenduService.getById(id);
+//        Path filePath = Paths.get(compteRendu.getFilePath());
+//        Resource resource = new UrlResource(filePath.toUri());
+//
+//        String contentType;
+//        if (compteRendu.getFileType().equals("PHOTO")) {
+//            contentType = "image/jpeg";
+//        } else {
+//            contentType = "video/mp4";
+//        }
+//
+//        return ResponseEntity.ok()
+//                .contentType(MediaType.parseMediaType(contentType))
+//                .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + resource.getFilename() + "\"")
+//                .body(resource);
+//    }
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN') or hasRole('MAITRE_OEUVRE')")
