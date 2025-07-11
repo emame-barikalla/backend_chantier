@@ -53,6 +53,13 @@ export class ProjetComponent implements OnInit {
   archivingProjetId: number | null = null;
   showArchiveConfirm = false;
 
+  // Property to hold today's date as a string
+  todayString: string = '';
+  minDateFin: string = '';
+
+  // Property to check project name uniqueness
+  isProjectNameUnique: boolean = true;
+
   constructor(
     private projetService: ProjetService,
     private fb: FormBuilder,
@@ -68,6 +75,18 @@ export class ProjetComponent implements OnInit {
       budget: ['', Validators.required],
       status: [''],
       category: ['', Validators.required]
+    });
+    this.todayString = this.formatToday();
+    this.minDateFin = this.todayString;
+
+    // Mettre à jour minDateFin quand dateDebut change
+    this.projetForm.get('dateDebut')?.valueChanges.subscribe(dateDebut => {
+      this.minDateFin = this.addMonthsToDate(dateDebut, 3);
+      // Si la date de fin actuelle est avant la nouvelle minDateFin, la réinitialiser
+      const dateFinCtrl = this.projetForm.get('dateFin');
+      if (dateFinCtrl && dateFinCtrl.value && dateFinCtrl.value < this.minDateFin) {
+        dateFinCtrl.setValue(this.minDateFin);
+      }
     });
   }
 
@@ -276,9 +295,31 @@ export class ProjetComponent implements OnInit {
     }
   }
 
+  // Add method to check project name uniqueness
+  checkProjectNameUniqueness(name: string): boolean {
+    // If editing a project, exclude the current project from the check
+    if (this.editingProjet && this.editingProjet.nom === name) {
+      return true;
+    }
+    return !this.projets.some(projet => 
+      projet.nom.toLowerCase() === name.toLowerCase()
+    );
+  }
+
+  // Add method to handle project name changes
+  onProjectNameChange(): void {
+    const nameValue = this.projetForm.get('nom')?.value;
+    if (nameValue && nameValue.trim() !== '') {
+      this.isProjectNameUnique = this.checkProjectNameUniqueness(nameValue);
+    } else {
+      this.isProjectNameUnique = true; // Reset when name is empty
+    }
+  }
+
   openModal(projet?: Projet): void {
     this.editingProjet = projet || null;
     this.projetForm.reset();
+    this.isProjectNameUnique = true;
     
     if (projet) {
       console.log('Editing project with category:', projet.category);
@@ -318,6 +359,14 @@ export class ProjetComponent implements OnInit {
     return date.toISOString().split('T')[0];
   }
 
+  private formatToday(): string {
+    const today = new Date();
+    const yyyy = today.getFullYear();
+    const mm = String(today.getMonth() + 1).padStart(2, '0');
+    const dd = String(today.getDate()).padStart(2, '0');
+    return `${yyyy}-${mm}-${dd}`;
+  }
+
   closeModal(): void {
     this.showModal = false;
     this.editingProjet = null;
@@ -331,6 +380,13 @@ export class ProjetComponent implements OnInit {
   }
 
   onSubmit(): void {
+    const nameValue = this.projetForm.get('nom')?.value;
+    if (nameValue && !this.checkProjectNameUniqueness(nameValue)) {
+      this.isProjectNameUnique = false;
+      this.notificationService.warning('Ce nom de projet existe déjà. Veuillez choisir un nom unique.');
+      return;
+    }
+    
     if (this.projetForm.valid) {
       this.isLoading = true;
       
@@ -444,5 +500,19 @@ export class ProjetComponent implements OnInit {
     this.selectedCategory = '';
     this.loadProjets(); // Reset to all projects
     this.currentPage = 1; // Reset to first page
+  }
+
+  private addMonthsToDate(dateString: string, months: number): string {
+    if (!dateString) return '';
+    const date = new Date(dateString);
+    date.setMonth(date.getMonth() + months);
+    // Gérer le cas où le mois suivant n'a pas le même nombre de jours
+    if (date.getDate() !== new Date(dateString).getDate()) {
+      date.setDate(0);
+    }
+    const yyyy = date.getFullYear();
+    const mm = String(date.getMonth() + 1).padStart(2, '0');
+    const dd = String(date.getDate()).padStart(2, '0');
+    return `${yyyy}-${mm}-${dd}`;
   }
 }

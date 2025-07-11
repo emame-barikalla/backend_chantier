@@ -26,6 +26,7 @@ export class CompteRenduComponent implements OnInit, OnDestroy {
   fileTypes = ['PHOTO', 'VIDEO'];
   selectedTypeFilter: string = '';
   fileRequired: boolean = false;
+  isTitleUnique: boolean = true;
   
   // Pagination properties
   currentPage: number = 1;
@@ -146,11 +147,28 @@ export class CompteRenduComponent implements OnInit, OnDestroy {
     this.applyFilters();
   }
 
+  checkTitleUniqueness(title: string): boolean {
+    // Check if a compte rendu with this title already exists
+    return !this.compteRendus.some(cr => 
+      cr.titre.toLowerCase() === title.toLowerCase()
+    );
+  }
+
+  onTitleChange(): void {
+    const titleValue = this.compteRenduForm.get('titre')?.value;
+    if (titleValue && titleValue.trim() !== '') {
+      this.isTitleUnique = this.checkTitleUniqueness(titleValue);
+    } else {
+      this.isTitleUnique = true; // Reset when title is empty
+    }
+  }
+
   openModal(): void {
     this.showModal = true;
     this.compteRenduForm.reset();
     this.selectedFile = null;
     this.fileRequired = false;
+    this.isTitleUnique = true;
   }
 
   closeModal(): void {
@@ -178,6 +196,12 @@ export class CompteRenduComponent implements OnInit, OnDestroy {
   onSubmit(): void {
     if (!this.selectedFile) {
       this.fileRequired = true;
+      return;
+    }
+    
+    const titleValue = this.compteRenduForm.get('titre')?.value;
+    if (titleValue && !this.checkTitleUniqueness(titleValue)) {
+      this.isTitleUnique = false;
       return;
     }
     

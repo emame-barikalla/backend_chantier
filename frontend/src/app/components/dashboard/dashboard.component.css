@@ -95,7 +95,7 @@
   background-color: #d0af56;
 }
 
-.stat-card.tasks::after {
+.stat-card.enterprise::after {
   background-color: #ff6384;
 }
 

@@ -216,9 +216,19 @@
       <form [formGroup]="compteRenduForm" (ngSubmit)="onSubmit()">
         <div class="form-group">
           <label for="titre"><i class="fas fa-heading form-icon"></i> Titre <span class="required">*</span></label>
-          <input type="text" id="titre" formControlName="titre" required placeholder="Entrez le titre" />
+          <input 
+            type="text" 
+            id="titre" 
+            formControlName="titre" 
+            required 
+            placeholder="Entrez le titre" 
+            (input)="onTitleChange()"
+          />
           <div class="error-message" *ngIf="compteRenduForm.get('titre')?.invalid && compteRenduForm.get('titre')?.touched">
             Le titre est obligatoire
+          </div>
+          <div class="error-message" *ngIf="!isTitleUnique">
+            Ce titre existe déjà. Veuillez choisir un titre unique.
           </div>
         </div>
         <div class="form-group">
@@ -259,7 +269,7 @@
           <button
             type="submit"
             class="save-button"
-            [disabled]="!compteRenduForm.valid || !selectedFile || isUploading"
+            [disabled]="!compteRenduForm.valid || !selectedFile || isUploading || !isTitleUnique"
           >
             <i class="fas fa-spinner fa-spin" *ngIf="isUploading"></i>
             <i class="fas fa-upload" *ngIf="!isUploading"></i>

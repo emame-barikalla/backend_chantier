@@ -23,6 +23,8 @@ export class BureauSuiviComponent implements OnInit {
   bureauSuiviForm: FormGroup;
   filteredBureauxSuivi: User[] = [];
   searchQuery: string = '';
+  isEmailUnique: boolean = true;
+  emailExistsError = false;
 
   constructor(
     private userService: UserService,
@@ -71,8 +73,30 @@ export class BureauSuiviComponent implements OnInit {
     );
   }
 
+  checkEmailUniqueness(email: string): boolean {
+    // If editing a bureau, exclude the current bureau from the check
+    if (this.editingBureauSuivi && this.editingBureauSuivi.email === email) {
+      return true;
+    }
+    return !this.bureauxSuivi.some(bureau => 
+      bureau.email.toLowerCase() === email.toLowerCase()
+    );
+  }
+
+  onEmailChange(): void {
+    const emailValue = this.bureauSuiviForm.get('email')?.value;
+    if (emailValue && emailValue.trim() !== '') {
+      this.isEmailUnique = this.checkEmailUniqueness(emailValue);
+    } else {
+      this.isEmailUnique = true; // Reset when email is empty
+    }
+  }
+
   openModal(bureauSuivi?: User): void {
     this.editingBureauSuivi = bureauSuivi || null;
+    this.isEmailUnique = true;
+    this.emailExistsError = false;
+    
     if (bureauSuivi) {
       this.bureauSuiviForm.patchValue({
         nom: bureauSuivi.nom,
@@ -100,6 +124,14 @@ export class BureauSuiviComponent implements OnInit {
   }
 
   onSubmit(): void {
+    this.emailExistsError = false;
+    
+    const emailValue = this.bureauSuiviForm.get('email')?.value;
+    if (emailValue && !this.checkEmailUniqueness(emailValue)) {
+      this.isEmailUnique = false;
+      return;
+    }
+    
     if (this.bureauSuiviForm.valid) {
       this.isLoading = true;
       const bureauSuiviData = this.bureauSuiviForm.value;

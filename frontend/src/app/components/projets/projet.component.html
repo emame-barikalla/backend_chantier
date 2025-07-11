@@ -172,28 +172,40 @@
         <form [formGroup]="projetForm" (ngSubmit)="onSubmit()">
           <div class="form-group">
             <label for="nom">Nom</label>
-            <input type="text" id="nom" formControlName="nom" required />
+            <input 
+              type="text" 
+              id="nom" 
+              formControlName="nom" 
+              required 
+              (input)="onProjectNameChange()" 
+            />
+            <div class="error-message" *ngIf="projetForm.get('nom')?.invalid && projetForm.get('nom')?.touched">
+              Le nom du projet est obligatoire
+            </div>
+            <div class="error-message" *ngIf="!isProjectNameUnique">
+              Ce nom de projet existe déjà. Veuillez choisir un nom unique.
+            </div>
           </div>
           <div class="form-group">
             <label for="dateDebut">Date Début</label>
-            <input type="date" id="dateDebut" formControlName="dateDebut" />
+            <input type="date" id="dateDebut" formControlName="dateDebut" [min]="todayString" />
           </div>
           <div class="form-group">
             <label for="dateFin">Date Fin</label>
-            <input type="date" id="dateFin" formControlName="dateFin" />
+            <input type="date" id="dateFin" formControlName="dateFin" [min]="minDateFin" />
           </div>
           <div class="form-group">
             <label for="budget">Budget</label>
             <input type="number" id="budget" formControlName="budget" />
           </div>
-          <!-- <div class="form-group">
+          <div class="form-group" *ngIf="editingProjet">
             <label for="status">Status</label>
-            <select id="status" formControlName="status">
+            <select id="status" formControlName="status" >
               <option *ngFor="let status of ['PLANIFIE','EN_COURS', 'RETARDE', 'BLOQUE','TERMINE']" [value]="status">
                 {{ status }}
               </option>
             </select>
-          </div> -->
+          </div>
           <!-- Add Category field -->
           <div class="form-group">
             <label for="category">Catégorie</label>
@@ -205,7 +217,7 @@
             <button
               type="submit"
               class="save-button"
-              [disabled]="!projetForm.valid || isLoading"
+              [disabled]="!projetForm.valid || isLoading || !isProjectNameUnique"
             >
               {{ isLoading ? 'Saving...' : 'Enregistrer' }}
             </button>

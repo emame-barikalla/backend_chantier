@@ -74,7 +74,21 @@
           </div>
           <div class="form-group">
             <label for="email">Email</label>
-            <input type="email" id="email" formControlName="email" required />
+            <input 
+              type="email" 
+              id="email" 
+              formControlName="email" 
+              required 
+              (input)="onEmailChange()"
+            />
+            <div class="validation-error" *ngIf="entrepriseForm.get('email')?.invalid && (entrepriseForm.get('email')?.dirty || entrepriseForm.get('email')?.touched)">
+              <span *ngIf="entrepriseForm.get('email')?.errors?.['required']">L'email est requis.</span>
+              <span *ngIf="entrepriseForm.get('email')?.errors?.['email']">Format d'email invalide.</span>
+              <span *ngIf="emailExistsError">Cet email existe déjà.</span>
+            </div>
+            <div class="validation-error" *ngIf="!isEmailUnique">
+              Cet email existe déjà. Veuillez en choisir un autre.
+            </div>
           </div>
           <div class="form-group">
             <label for="telephone">Téléphone</label>
@@ -92,7 +106,7 @@
             <button
               type="submit"
               class="save-button"
-              [disabled]="!entrepriseForm.valid || isLoading"
+              [disabled]="!entrepriseForm.valid || isLoading || !isEmailUnique"
             >
               {{ isLoading ? 'Saving...' : 'Enregistrer' }}
             </button>

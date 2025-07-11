@@ -402,3 +402,12 @@
   background-color: #ccc;
   cursor: not-allowed;
 }
+
+.validation-error {
+  color: #d32f2f;
+  font-size: 0.95em;
+  margin-top: 4px;
+  margin-bottom: 0;
+  padding-left: 2px;
+  font-weight: 500;
+}

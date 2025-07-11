@@ -34,6 +34,7 @@ export class TasksComponent implements OnInit {
   projects: Projet[] = [];
   projectUsers: { [key: number]: ProjetUserDTO[] } = {};
   currentUser: User | null = null;
+  todayString: string = '';
 
   constructor(
     private tacheService: TacheService,
@@ -55,6 +56,8 @@ export class TasksComponent implements OnInit {
     this.taskForm.get('projetId')?.valueChanges.subscribe(projetId => {
       this.updateAvailableUsers(projetId);
     });
+
+    this.todayString = this.formatToday();
   }
 
   ngOnInit(): void {
@@ -315,5 +318,13 @@ export class TasksComponent implements OnInit {
       default:
         return Statut.A_FAIRE;
     }
+  }
+
+  private formatToday(): string {
+    const today = new Date();
+    const yyyy = today.getFullYear();
+    const mm = String(today.getMonth() + 1).padStart(2, '0');
+    const dd = String(today.getDate()).padStart(2, '0');
+    return `${yyyy}-${mm}-${dd}`;
   }
 }

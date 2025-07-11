@@ -1,6 +1,7 @@
 package com.app.chantier_back.entities;
 
 import com.app.chantier_back.entities.enumeration.StatutTache;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -28,10 +29,12 @@ public class Tache {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "projet_id")
+    @JsonIgnore
     private Projet projet;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "assignee_id")
+    @JsonIgnore
     private User assignee;
 
 

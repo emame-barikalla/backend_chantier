@@ -150,9 +150,19 @@
       <form [formGroup]="documentForm" (ngSubmit)="onSubmit()">
         <div class="form-group">
           <label for="titre">Titre <span class="required">*</span></label>
-          <input type="text" id="titre" formControlName="titre" required placeholder="Entrez le titre du document" />
+          <input 
+            type="text" 
+            id="titre" 
+            formControlName="titre" 
+            required 
+            placeholder="Entrez le titre du document" 
+            (input)="onTitleChange()"
+          />
           <div class="error-message" *ngIf="documentForm.get('titre')?.invalid && documentForm.get('titre')?.touched">
             Le titre est obligatoire
+          </div>
+          <div class="error-message" *ngIf="!isTitleUnique">
+            Ce titre existe déjà. Veuillez choisir un titre unique.
           </div>
         </div>
         <div class="form-group">
@@ -193,7 +203,7 @@
           <button
             type="submit"
             class="save-button"
-            [disabled]="!documentForm.valid || !selectedFile || isLoading"
+            [disabled]="!documentForm.valid || !selectedFile || isLoading || !isTitleUnique"
           >
             <i class="fas fa-spinner fa-spin" *ngIf="isUploading"></i>
             {{ isUploading ? 'Téléchargement...' : 'Télécharger' }}

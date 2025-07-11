@@ -36,6 +36,7 @@ export class DocumentComponent implements OnInit {
   isFromArchive: boolean = false;
   showDocumentView: boolean = false;
   selectedDocumentId: number | null = null;
+  isTitleUnique: boolean = true;
   
   // Pagination properties
   currentPage: number = 1;
@@ -161,11 +162,26 @@ export class DocumentComponent implements OnInit {
     this.applyFilters();
   }
 
+  checkTitleUniqueness(title: string): boolean {
+    // If editing a document, we need to exclude the current document from the check
+    return !this.documents.some(doc => doc.titre.toLowerCase() === title.toLowerCase());
+  }
+
+  onTitleChange(): void {
+    const titleValue = this.documentForm.get('titre')?.value;
+    if (titleValue && titleValue.trim() !== '') {
+      this.isTitleUnique = this.checkTitleUniqueness(titleValue);
+    } else {
+      this.isTitleUnique = true; // Reset when title is empty
+    }
+  }
+
   openModal(): void {
     this.showModal = true;
     this.documentForm.reset();
     this.selectedFile = null;
     this.fileRequired = false;
+    this.isTitleUnique = true;
   }
 
   closeModal(): void {
@@ -193,6 +209,12 @@ export class DocumentComponent implements OnInit {
   onSubmit(): void {
     if (!this.selectedFile) {
       this.fileRequired = true;
+      return;
+    }
+    
+    const titleValue = this.documentForm.get('titre')?.value;
+    if (titleValue && !this.checkTitleUniqueness(titleValue)) {
+      this.isTitleUnique = false;
       return;
     }
     

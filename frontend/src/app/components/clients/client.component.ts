@@ -23,6 +23,8 @@ export class ClientComponent implements OnInit {
   clientForm: FormGroup;
   filteredClients: User[] = [];
   searchQuery: string = '';
+  emailExistsError = false;
+  isEmailUnique: boolean = true;
 
   constructor(
     private userService: UserService,
@@ -32,9 +34,15 @@ export class ClientComponent implements OnInit {
     this.clientForm = this.fb.group({
       nom: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      telephone: ['', Validators.required],
-      adresse: [''],
-      password: ['']
+      telephone: [
+        '',
+        [
+          Validators.required,
+          Validators.pattern(/^[0-9]{8,}$/) // Only numbers, at least 8 digits
+        ]
+      ],
+      adresse: ['', Validators.required],
+      password: ['', Validators.required],
     });
   }
 
@@ -71,8 +79,28 @@ export class ClientComponent implements OnInit {
     );
   }
 
+  checkEmailUniqueness(email: string): boolean {
+    // If editing a client, exclude the current client from the check
+    if (this.editingClient && this.editingClient.email === email) {
+      return true;
+    }
+    return !this.clients.some(client => 
+      client.email.toLowerCase() === email.toLowerCase()
+    );
+  }
+
+  onEmailChange(): void {
+    const emailValue = this.clientForm.get('email')?.value;
+    if (emailValue && emailValue.trim() !== '') {
+      this.isEmailUnique = this.checkEmailUniqueness(emailValue);
+    } else {
+      this.isEmailUnique = true; // Reset when email is empty
+    }
+  }
+
   openModal(client?: User): void {
     this.editingClient = client || null;
+    this.isEmailUnique = true;
     if (client) {
       this.clientForm.patchValue({
         nom: client.nom,
@@ -100,18 +128,23 @@ export class ClientComponent implements OnInit {
   }
 
   onSubmit(): void {
+    this.emailExistsError = false;
+    
+    const emailValue = this.clientForm.get('email')?.value;
+    if (emailValue && !this.checkEmailUniqueness(emailValue)) {
+      this.isEmailUnique = false;
+      return;
+    }
+    
     if (this.clientForm.valid) {
       this.isLoading = true;
       const clientData = this.clientForm.value;
 
       if (this.editingClient) {
         const updatedData = { ...clientData };
-        
-        // If password is empty, set it to the existing password
         if (!updatedData.password || updatedData.password.trim() === '') {
           updatedData.password = this.editingClient.password;
         }
-
         this.userService.updateUser(this.editingClient.id, updatedData).subscribe({
           next: () => {
             this.loadClients();
@@ -119,7 +152,9 @@ export class ClientComponent implements OnInit {
             this.isLoading = false;
           },
           error: (error) => {
-            console.error('Error updating client:', error);
+            if (error?.error?.message?.includes('email')) {
+              this.emailExistsError = true;
+            }
             this.isLoading = false;
           }
         });
@@ -129,7 +164,6 @@ export class ClientComponent implements OnInit {
             ...clientData,
             roles: [{ id: this.clientRoleId }]
           };
-
           this.userService.createUser(newClient).subscribe({
             next: () => {
               this.loadClients();
@@ -137,7 +171,9 @@ export class ClientComponent implements OnInit {
               this.isLoading = false;
             },
             error: (error) => {
-              console.error('Error creating client:', error);
+              if (error?.error?.message?.includes('email')) {
+                this.emailExistsError = true;
+              }
               this.isLoading = false;
             }
           });
