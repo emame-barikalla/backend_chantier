@@ -6,11 +6,11 @@
         <a [routerLink]="['/projets']" class="back-button">
           <i class="fas fa-arrow-left"></i>
         </a>
-        <span class="liste-des-projets">Utilisateurs du projet</span>
+        <span class="liste-des-projets">Intervenants du projet</span>
       </div>
       <!-- Add user button in header -->
       <button class="add-user-button" (click)="toggleAddUserForm()">
-        <i class="fas fa-user-plus"></i> Ajouter un utilisateur
+        <i class="fas fa-user-plus"></i> Ajouter un Intervenant
       </button>
     </div>
   </div>
@@ -20,7 +20,7 @@
     <!-- User Assignment Form - hidden by default -->
     <div class="assignment-card" *ngIf="showAddUserForm">
       <div class="card-header-flex">
-        <h4 class="section-title">Ajouter un utilisateur</h4>
+        <h4 class="section-title">Ajouter un Intervenant</h4>
         <button class="close-form-button" (click)="toggleAddUserForm()">
           <i class="fas fa-times"></i>
         </button>
@@ -40,9 +40,9 @@
             </select>
           </div>
           <div class="form-group half-width">
-            <label for="user">Utilisateur</label>
+            <label for="user">Intervenant</label>
             <select id="user" formControlName="userId" >
-              <option value="">Sélectionner un utilisateur</option>
+              <option value="">Sélectionner un Intervenant</option>
               <option *ngFor="let user of filteredUsers" [value]="user.id">
                 {{user.nom}} {{user.prenom}}
               </option>
@@ -59,7 +59,7 @@
 
     <!-- Current Project Users List -->
     <div class="users-list-card">
-      <h4 class="section-title">Utilisateurs du projet</h4>
+      <h4 class="section-title">Intervenants du projet</h4>
       
       <!-- Empty state message outside the table -->
       <div *ngIf="projectUsers.length === 0" class="empty-state-container">
